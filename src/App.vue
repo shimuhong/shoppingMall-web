@@ -3,12 +3,22 @@
     <div class="headerCont">
       <img :src="logo" alt="" class="logo">
       <div class="rightBox">
-        <div>
+        <div class="register">
           请注册
         </div>
         <div class="login" @click="loginClick">
           登录
         </div>
+        <!-- 头像图标 -->
+        <el-dropdown placement="bottom-end">
+          <div class="userPhoto"></div>
+          <template #dropdown>
+            <el-dropdown-menu>
+              撒打算打算撒打算打算撒打算打算撒打算打算撒打算打算撒打算打算
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+        
       </div>
     </div>
   </el-header>
@@ -71,8 +81,21 @@ header {
     .rightBox {
       color: #fff;
       display: flex;
+      align-items: center;
+      .register {
+        cursor: pointer;
+      }
       .login {
         margin-left: 20px;
+        cursor: pointer;
+      }
+      .userPhoto {
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+        background: #ccc;
+        margin-left: 20px;
+        cursor: pointer;
       }
     }
   }

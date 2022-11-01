@@ -21,6 +21,11 @@
           <el-menu-item index="1">
             <div>手机</div>
             <div>></div>
+            <div class="tipBox">
+              <div class="tipCont">
+                asdasd
+              </div>
+            </div>
           </el-menu-item>
           <el-menu-item index="2">
             <div>电视</div>
@@ -152,6 +157,23 @@ $contPadding: 14px;
           height: 46px;
           display: flex;
           justify-content: space-between;
+          position: relative;
+          .tipBox {
+            width: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            .tipCont {
+              min-width: 100px;
+              position: absolute;
+              left: 2px;
+              top: 0;
+              background: #fff;
+              color: #333;
+              border-radius: 14px;
+              z-index: 1;
+            }
+          }
         }
         .el-menu-item.is-active {
           color: #fff;
