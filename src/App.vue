@@ -6,7 +6,7 @@
         <div>
           请注册
         </div>
-        <div class="login">
+        <div class="login" @click="loginClick">
           登录
         </div>
       </div>
@@ -20,15 +20,38 @@
 </template>
 <script>
 import { useRoute, useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus'
 import logo from '@/assets/logo.svg';
+import request from '@/utils/request/index.js';
 export default {
   name: 'app',
   components: {
     
   },
   setup() {
+
+    const loginClick = () => {
+      console.log('loginClick:', import.meta.env)
+      ElMessage({
+        message: '报错了！',
+        type: 'warning',
+      })
+      request({
+        url: '/djstockorder-api/placeOrder/revocation',
+        data: {
+          placeOrderId: 111
+        },
+      }).then(res => {
+        console.log('sss:', res)
+      }).catch((err) => {
+        console.log('err:', err)
+      });
+    }
+
+
     return {
-      logo
+      logo,
+      loginClick
     };
   }
 }

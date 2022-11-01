@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { createApp } from 'vue';
-import { Toast } from 'vant';
+import { ElMessage } from 'element-plus'
 import { useOnline } from '@vueuse/core';
 
 import _ from 'lodash';
 import { iconUrl } from './base64';
 const app = createApp();
-app.use(Toast);
+app.use(ElMessage);
 const instance = axios.create();
 instance.defaults.baseURL = import.meta.env.VITE_BASE_API;
 instance.defaults.headers['Content-Type'] = 'application/json';
@@ -45,17 +45,17 @@ const getParams = config => {
   }
 };
 
-const showNetErrorToast = _.debounce(() => {
-  Toast({
-    message: '网络不给力',
-    icon: iconUrl
-  });
-}, 200);
+// const showNetErrorElMessage = _.debounce(() => {
+//   ElMessage({
+//     message: '网络不给力',
+//     icon: iconUrl
+//   });
+// }, 200);
 // 添加请求拦截器
 instance.interceptors.request.use(
   async function (config) {
     if (useOnline().value == false) {
-      showNetErrorToast();
+      // showNetErrorElMessage();
       return Promise.reject();
     }
 
@@ -63,17 +63,18 @@ instance.interceptors.request.use(
       'Content-Type': 'application/json',
       ...config.headers,
     };
-    if (subjectShopListCount && subjectShopListCount > 0) {
-      config.headers.shopMdCode = shopMdCode || 'all';
-    }
+    // if (subjectShopListCount && subjectShopListCount > 0) {
+    //   config.headers.shopMdCode = shopMdCode || 'all';
+    // }
 
     // 由于有的接口有时候返回将近20秒 lodding自动显示取消延长到21秒
     if (config.loading) {
-      Toast.loading({
-        message: '加载中...',
-        forbidClick: true,
-        duration: 30000
-      });
+      console.log('加载中')
+      // ElMessage.loading({
+      //   message: '加载中...',
+      //   forbidClick: true,
+      //   duration: 30000
+      // });
     }
     return config;
   },
@@ -86,7 +87,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   response => {
     // console.log('response', response);
-    Toast.clear();
+    // ElMessage.clear();
     if (response.status == 200) {
       const { code, message, data, status } = response.data || {};
       if (code == 200) {
@@ -98,7 +99,7 @@ instance.interceptors.response.use(
         return Promise.resolve(response.data);
       } else {
         if (!response.config.operateBusy) {
-          Toast(message);
+          ElMessage(message);
         }
         return Promise.reject(response.data);
       }
@@ -107,7 +108,7 @@ instance.interceptors.response.use(
     }
   },
   function (error) {
-    Toast.clear();
+    // ElMessage.clear();
     console.log('response error', error);
     return Promise.reject(error);
   }
