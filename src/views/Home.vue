@@ -2,8 +2,8 @@
   <div class="content">
     <!-- 轮播 -->
     <el-carousel class="carousel">
-      <el-carousel-item v-for="item in 4" :key="item">
-        <h3 class="small justify-center" text="2xl">{{ item }}</h3>
+      <el-carousel-item v-for="item in 3" :key="item">
+        <img :src="carouselImg" alt="">
       </el-carousel-item>
     </el-carousel>
     <!-- 广播 -->
@@ -54,7 +54,15 @@
         </el-menu>
       </div>
       <div class="rightCont">
-        right
+        <div v-for="item in 10" :key="item" class="prodBox">
+          <img :src="prodImg" alt="">
+          <div class="prodName">
+            HUAWEI MateBook D 16
+          </div>
+          <div class="prodCount">
+            ¥ 5399
+          </div>
+        </div>
       </div>
     </div>
 
@@ -67,19 +75,22 @@
     </div> -->
 
     <!-- 中间内容区路由切换 -->
-    <router-view v-slot="{ Component }">
+    <!-- <router-view v-slot="{ Component }">
       <keep-alive>
         <component :is="Component" :key="$router.name"/>
       </keep-alive>
-    </router-view>
+    </router-view> -->
   </div>
 </template>
 <script>
 import { useRouter, useRoute } from 'vue-router';
 import { ref, onMounted, reactive, toRefs } from 'vue';
+import carouselImg from '@/assets/carouselImg.png';
+import prodImg from '@/assets/prodImg.png';
 export default {
   name: 'home',
   components: {
+    
   },
   setup() {
     const router = useRouter();
@@ -102,7 +113,9 @@ export default {
 
     return {
       ...toRefs(params),
-      btclick
+      btclick,
+      carouselImg,
+      prodImg
     };
   }
 }
@@ -115,14 +128,19 @@ $contMargin: 23px;
 $contPadding: 14px;
 .content {
   padding-top: 15px;
+  padding-bottom: 30px;
   width: 1200px;
   margin: 0 auto;
 
   .carousel {
     border-radius: $contRadius;
-    height: 150px;
+    min-height: 150px;
     .el-carousel__item {
       background: #444;
+      img {
+        width: 100%;
+        min-height: 400px;
+      }
     }
   }
   .broadcast {
@@ -137,11 +155,12 @@ $contPadding: 14px;
     display: flex;
     padding-top: $contMargin;
     .navBar {
+      flex-shrink: 0;
       width: 207px;
       background: $contBack;
       border-radius: $contRadius;
-      min-height: 200px;
-      margin-right: $contMargin;
+      min-height: 500px;
+      // margin-right: 10px;
       padding: $contPadding 0;
       // .navItem {
       //   height: 30px;
@@ -151,6 +170,9 @@ $contPadding: 14px;
       //   background: #BA0124;
       //   color: #fff;
       // }
+      .el-menu {
+        border: none;
+      }
       .el-menu-vertical-warp {
         .el-menu-item {
           color: #333;
@@ -159,10 +181,13 @@ $contPadding: 14px;
           justify-content: space-between;
           position: relative;
           .tipBox {
-            width: 0;
+            // background: #000;
+            width: 5px;
             position: absolute;
-            right: 0;
+            right: -5px;
             top: 0;
+            height: 100%;
+            display: none;
             .tipCont {
               min-width: 100px;
               position: absolute;
@@ -172,6 +197,14 @@ $contPadding: 14px;
               color: #333;
               border-radius: 14px;
               z-index: 1;
+              box-shadow: 5px 0 20px -5px #ccc;
+            }
+          }
+          &:hover {
+            color: #fff;
+            background: #BA0124;
+            .tipBox {
+              display: block;
             }
           }
         }
@@ -182,11 +215,32 @@ $contPadding: 14px;
       }
     }
     .rightCont {
-      background: $contBack;
-      border-radius: $contRadius;
       min-height: 200px;
-      padding: $contPadding;
+      display: flex;
+      flex-wrap: wrap;
       flex-grow: 1;
+      // justify-content: space-between;
+      text-align: center;
+      .prodBox {
+        background: $contBack;
+        border-radius: $contRadius;
+        width: 238px;
+        height: 311px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+        img {
+          height: 190px;
+          margin: 25px auto 0;
+          display: block;
+        }
+        .prodName {
+          font-weight: bold;
+        }
+        .prodCount {
+          font-weight: bold;
+          color: #C20022;
+        }
+      }
     }
   }
 }
