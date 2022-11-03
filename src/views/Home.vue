@@ -23,7 +23,12 @@
             <div>></div>
             <div class="tipBox">
               <div class="tipCont">
-                asdasd
+                <div class="tipItem" v-for="it in 10" :key="it">
+                  <div class="title">
+                    HUAWEI MateBook D 16
+                  </div>
+                  <img :src="prodImg" alt="">
+                </div>
               </div>
             </div>
           </el-menu-item>
@@ -54,7 +59,7 @@
         </el-menu>
       </div>
       <div class="rightCont">
-        <div v-for="item in 10" :key="item" class="prodBox">
+        <div v-for="item in 10" :key="item" class="prodItem" @click="prodClick">
           <img :src="prodImg" alt="">
           <div class="prodName">
             HUAWEI MateBook D 16
@@ -104,6 +109,11 @@ export default {
       router.push('page1');
     }
 
+    // 进入订货页
+    const prodClick = () => {
+      router.push('order');
+    }
+
     onMounted(() => {
       console.log('onMounted==', $route);
 
@@ -115,7 +125,8 @@ export default {
       ...toRefs(params),
       btclick,
       carouselImg,
-      prodImg
+      prodImg,
+      prodClick
     };
   }
 }
@@ -135,13 +146,17 @@ $contPadding: 14px;
   .carousel {
     border-radius: $contRadius;
     min-height: 150px;
-    .el-carousel__item {
-      background: #444;
-      img {
-        width: 100%;
-        min-height: 400px;
+    .el-carousel__container {
+      height: 425px;
+      .el-carousel__item {
+        background: #444;
+        img {
+          width: 100%;
+          min-height: 418px;
+        }
       }
     }
+    
   }
   .broadcast {
     margin-top: 14px;
@@ -184,20 +199,39 @@ $contPadding: 14px;
             // background: #000;
             width: 5px;
             position: absolute;
-            right: -5px;
+            right: -4px;
             top: 0;
             height: 100%;
             display: none;
             .tipCont {
+              padding: 25px;
               min-width: 100px;
               position: absolute;
-              left: 2px;
+              left: 3px;
               top: 0;
               background: #fff;
               color: #333;
               border-radius: 14px;
               z-index: 1;
               box-shadow: 5px 0 20px -5px #ccc;
+              width: max-content;
+              max-width: 770px;
+              .tipItem {
+                float: left;
+                display: flex;
+                margin-right: 25px;
+                cursor: pointer;
+                img {
+                  width: 49px;
+                  height: 49px;
+                }
+                .title {
+                  font-weight: bold;
+                }
+                &:hover {
+                  color: #BA0124;
+                }
+              }
             }
           }
           &:hover {
@@ -221,13 +255,14 @@ $contPadding: 14px;
       flex-grow: 1;
       // justify-content: space-between;
       text-align: center;
-      .prodBox {
+      .prodItem {
         background: $contBack;
         border-radius: $contRadius;
         width: 238px;
         height: 311px;
         margin-bottom: 10px;
         margin-left: 10px;
+        cursor: pointer;
         img {
           height: 190px;
           margin: 25px auto 0;
