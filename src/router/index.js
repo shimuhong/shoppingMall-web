@@ -9,14 +9,14 @@ const router = createRouter({
       name: 'home',
       component: Home,
       /* 重定向 至默认显示页 */
-      redirect: '/page1',
-      children: [
-        {
-          path: '/page1',
-          name: 'page1',
-          component: () => import('../views/page1.vue')
-        }
-      ]
+      // redirect: '/page1',
+      // children: [
+      //   {
+      //     path: '/page1',
+      //     name: 'page1',
+      //     component: () => import('../views/page1.vue')
+      //   }
+      // ]
     },
     {
       path: '/order',
