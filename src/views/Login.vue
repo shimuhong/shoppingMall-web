@@ -1,7 +1,7 @@
 <template>
-  <SDialog ref="DialogRef" class="registerDialog">
+  <SDialog ref="DialogRef" class="loginDialog">
       <h3>
-        注册
+        登录
       </h3>
       <el-input v-model="userName" placeholder="请输入5位长度以上的账号" >
         <template #prefix>
@@ -18,28 +18,19 @@
           <img :src="icon_password" >
         </template>
       </el-input>
-      <el-input v-model="qqNumber" placeholder="请输入qq号码" >
-        <template #prefix>
-          <img :src="icon_qq" >
-        </template>
-      </el-input>
-    
-    <div class="verificationCode_Box">
-      <el-input v-model="verificationCode" placeholder="请输入验证码" />
-      <div class="codeImgBox">
-        VVVV
+      <div class="checkedBox">
+        <el-checkbox v-model="isChecked" size="large">我已同意协议</el-checkbox>
+        <div class="txt" @click="forgetClick">
+          忘记密码？
+        </div>
       </div>
-    </div>
-
-    <div class="checkedBox">
-      <el-checkbox v-model="isChecked" size="large">我已同意协议</el-checkbox>
-      <div class="txt">
-        
+      <div class="btnBox">
+        <el-button type="primary" @click="loginAPIClick">登录</el-button>
       </div>
-    </div>
-    <div class="btnBox">
-      <el-button type="primary" @click="registerAPIClick">立即注册</el-button>
-    </div>
+      <div class="btnBox">
+        <el-button class="default" @click="registerOpenClick">去注册</el-button>
+      </div>
+      
       
   </SDialog>
 </template>
@@ -61,8 +52,6 @@ export default {
     const params = reactive({
       userName: '',
       password: '',
-      qqNumber: '',
-      verificationCode: '',
       isChecked: false,
     });
     
@@ -71,7 +60,7 @@ export default {
       DialogRef.value.open();
     }
 
-    const registerAPIClick = () => {
+    const loginAPIClick = () => {
 
       console.log('loginClick:', import.meta.env)
       ElMessage({
@@ -89,7 +78,18 @@ export default {
         console.log('err:', err)
       });
     }
+    
+    // 忘记密码
+    const forgetClick = () => {
+      DialogRef.value.close();
+      emit('forgetClick')
+    }
 
+    // 去注册
+    const registerOpenClick = () => {
+      DialogRef.value.close();
+      emit('registerOpenClick')
+    }
 
     return {
       ...toRefs(params),
@@ -98,7 +98,9 @@ export default {
       icon_userName,
       icon_password,
       icon_qq,
-      registerAPIClick
+      loginAPIClick,
+      registerOpenClick,
+      forgetClick
     };
   }
 }
@@ -111,24 +113,19 @@ export default {
   color: #333;
   padding-bottom: 38px;
 }
-.dialogContent .verificationCode_Box {
-  display: flex;
-}
-.dialogContent .verificationCode_Box .codeImgBox {
-  background: #F7F7F7;
-  border-radius: 14px;
-  margin-left: 6px;
-  height: 52px;
-  width: 160px;
-}
 
-.registerDialog .dialogContent .checkedBox {
+.loginDialog .dialogContent .checkedBox {
   display: flex;
   height: 40px;
   line-height: 40px;
   justify-content: space-between;
   margin-top: -12px;
+  margin-bottom: 50px;
 
+}
+
+.loginDialog .dialogContent .checkedBox .txt {
+  cursor: pointer;
 }
 .dialogContent .checkedBox .el-checkbox--large .el-checkbox__inner {
   width: 27px;

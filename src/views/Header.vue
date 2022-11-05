@@ -62,7 +62,12 @@
           </div>
         </div>
       </div>
+      <!-- 登录 -->
+      <Login ref="LoginRef" @registerOpenClick="registerClick" @forgetClick="forgetClick"/>
+      <!-- 注册 -->
       <Register ref="RegisterRef" />
+      <!-- 忘记密码 -->
+      <Forget ref="ForgetRef" />
     </el-header>
 </template>
 <script>
@@ -77,43 +82,42 @@ import menu_my from '@/assets/menu_my.png';
 import menu_order from '@/assets/menu_order.png';
 import menu_get from '@/assets/menu_get.png';
 import menu_bag from '@/assets/menu_bag.png';
+import Login from '@/views/Login.vue';
 import Register from '@/views/Register.vue';
+import Forget from '@/views/Forget.vue';
 export default {
   name: 'app',
   components: {
-    Register
+    Login,
+    Register,
+    Forget
   },
   setup() {
     const RegisterRef = ref();
+    const LoginRef = ref();
+    const ForgetRef = ref();
+    
     // 注册
     const registerClick = () => {
       RegisterRef.value.open()
     }
     // 登录
     const loginClick = () => {
-      console.log('loginClick:', import.meta.env)
-      ElMessage({
-        message: '报错了！',
-        type: 'warning',
-      })
-      request({
-        url: '/djstockorder-api/placeOrder/revocation',
-        data: {
-          placeOrderId: 111
-        },
-      }).then(res => {
-        console.log('sss:', res)
-      }).catch((err) => {
-        console.log('err:', err)
-      });
+      LoginRef.value.open()
     }
-    
+    // 忘记密码
+    const forgetClick = () => {
+      ForgetRef.value.open()
+    }
 
     return {
       RegisterRef,
+      LoginRef,
+      ForgetRef,
       logo,
       registerClick,
       loginClick,
+      forgetClick,
       prodImg,
       menu_my,
       menu_order,

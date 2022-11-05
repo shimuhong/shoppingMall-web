@@ -1,13 +1,19 @@
 <template>
-  <SDialog ref="DialogRef" class="registerDialog">
+  <SDialog ref="DialogRef" class="forgetDialog">
       <h3>
-        注册
+        忘记密码
       </h3>
-      <el-input v-model="userName" placeholder="请输入5位长度以上的账号" >
+      <el-input v-model="userName" placeholder="请输入注册的手机号/邮箱" >
         <template #prefix>
           <img :src="icon_userName" >
         </template>
       </el-input>
+
+      <div class="messageBox btnBox">
+        <el-input v-model="verificationCode" placeholder="请输入验证码" />
+        <el-button type="primary">获取验证码</el-button>
+      </div>
+
       <el-input
         v-model="password"
         type="password"
@@ -15,31 +21,20 @@
         show-password
       >
         <template #prefix>
-          <img :src="icon_password" >
+          <div class="pwdPrefix">
+            密码
+          </div>
         </template>
       </el-input>
-      <el-input v-model="qqNumber" placeholder="请输入qq号码" >
-        <template #prefix>
-          <img :src="icon_qq" >
-        </template>
-      </el-input>
-    
-    <div class="verificationCode_Box">
-      <el-input v-model="verificationCode" placeholder="请输入验证码" />
-      <div class="codeImgBox">
-        VVVV
+      <div class="checkedBox">
+        <el-checkbox v-model="isChecked" size="large">我已同意协议</el-checkbox>
+        <div class="txt">
+          
+        </div>
       </div>
-    </div>
-
-    <div class="checkedBox">
-      <el-checkbox v-model="isChecked" size="large">我已同意协议</el-checkbox>
-      <div class="txt">
-        
+      <div class="btnBox">
+        <el-button type="primary" @click="resetAPIClick">立即重置</el-button>
       </div>
-    </div>
-    <div class="btnBox">
-      <el-button type="primary" @click="registerAPIClick">立即注册</el-button>
-    </div>
       
   </SDialog>
 </template>
@@ -61,7 +56,6 @@ export default {
     const params = reactive({
       userName: '',
       password: '',
-      qqNumber: '',
       verificationCode: '',
       isChecked: false,
     });
@@ -71,7 +65,7 @@ export default {
       DialogRef.value.open();
     }
 
-    const registerAPIClick = () => {
+    const resetAPIClick = () => {
 
       console.log('loginClick:', import.meta.env)
       ElMessage({
@@ -90,7 +84,6 @@ export default {
       });
     }
 
-
     return {
       ...toRefs(params),
       open,
@@ -98,7 +91,7 @@ export default {
       icon_userName,
       icon_password,
       icon_qq,
-      registerAPIClick
+      resetAPIClick,
     };
   }
 }
@@ -111,23 +104,28 @@ export default {
   color: #333;
   padding-bottom: 38px;
 }
-.dialogContent .verificationCode_Box {
+.messageBox {
   display: flex;
 }
-.dialogContent .verificationCode_Box .codeImgBox {
-  background: #F7F7F7;
-  border-radius: 14px;
-  margin-left: 6px;
+
+.forgetDialog .dialogContent .pwdPrefix {
+  padding-right: 10px;
+  margin-right: 15px;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+.dialogContent .messageBox.btnBox .el-button {
   height: 52px;
   width: 160px;
+  margin-left: 7px;
 }
 
-.registerDialog .dialogContent .checkedBox {
+.forgetDialog .dialogContent .checkedBox {
   display: flex;
   height: 40px;
   line-height: 40px;
   justify-content: space-between;
   margin-top: -12px;
+  margin-bottom: 50px;
 
 }
 .dialogContent .checkedBox .el-checkbox--large .el-checkbox__inner {
