@@ -45,6 +45,7 @@ import icon_userName from '@/assets/icon_userName.png';
 import icon_password from '@/assets/icon_password.png';
 import icon_qq from '@/assets/icon_qq.png';
 import { ElMessage } from 'element-plus'
+import request from '@/utils/request/index.js';
 
 export default {
   name: 'Dialog',

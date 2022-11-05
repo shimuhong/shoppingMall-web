@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="homeCont">
     <!-- 轮播 -->
     <el-carousel class="carousel">
       <el-carousel-item v-for="item in 3" :key="item">
@@ -137,12 +137,7 @@ $contBack: #fff;
 $contRadius: 14px;
 $contMargin: 23px;
 $contPadding: 14px;
-.content {
-  padding-top: 15px;
-  padding-bottom: 30px;
-  width: 1200px;
-  margin: 0 auto;
-
+.homeCont {
   .carousel {
     border-radius: $contRadius;
     min-height: 150px;

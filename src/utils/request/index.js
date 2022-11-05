@@ -8,7 +8,7 @@ import { iconUrl } from './base64';
 const app = createApp();
 app.use(ElMessage);
 const instance = axios.create();
-instance.defaults.baseURL = import.meta.env.VITE_BASE_API;
+instance.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 instance.defaults.headers['Content-Type'] = 'application/json';
 
 
