@@ -36,5 +36,7 @@ export default {
   padding-bottom: 30px;
   width: 1200px;
   margin: 0 auto;
+  position: relative;
+  z-index: 0;
 }
 </style>
