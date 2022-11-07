@@ -11,7 +11,9 @@
           </div>
           <!-- 头像图标 -->
           <div class="userPhotoBox">
+            <!-- 头像 -->
             <div class="userPhoto"></div>
+            <!-- hover用户信息 -->
             <div class="dropdownGet">
               <div class="dropdownBox">
                 <div class="headerBox">
