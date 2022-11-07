@@ -8,7 +8,11 @@
     </el-carousel>
     <!-- 广播 -->
     <div class="broadcast">
-      电视笔记本 平板笔记本 平板笔记本 平板笔记本 平板笔记本 平板笔记本 平板笔记本 平板
+      <img :src="icon_broadcast" alt="">
+      <span>
+        电视笔记本 平板笔记本 平板笔记本 平板笔记本 平板笔记本 平板笔记本 平板笔记本 平板
+      </span>
+      
     </div>
     <!-- 中部内容区域 -->
     <div class="contMiddel">
@@ -92,6 +96,8 @@ import { useRouter, useRoute } from 'vue-router';
 import { ref, onMounted, reactive, toRefs } from 'vue';
 import carouselImg from '@/assets/carouselImg.png';
 import prodImg from '@/assets/prodImg.png';
+import icon_broadcast from '@/assets/icon_broadcast.png';
+
 export default {
   name: 'home',
   components: {
@@ -126,6 +132,7 @@ export default {
       btclick,
       carouselImg,
       prodImg,
+      icon_broadcast,
       prodClick
     };
   }
@@ -160,6 +167,12 @@ $contPadding: 14px;
     line-height: 51px;
     border-radius: 7px;
     background: $contBack;
+    img {
+      width: 18px;
+      position: relative;
+      top: 5px;
+      margin-right: 8px;
+    }
   }
   .contMiddel {
     display: flex;

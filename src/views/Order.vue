@@ -8,7 +8,7 @@
       <div class="contTopRight">
         <div class="userBox">
           <div class="headerBox">
-            <div class="headerPic">
+            <div class="headerPic" @click="userClick">
               <!-- <img :src="prodImg" alt=""> -->
             </div>
             <div class="headerTxt">
@@ -149,6 +149,10 @@ export default {
       console.log('btclick==')
       router.push('page1');
     }
+    // 进入用户信息页面
+    const userClick = () => {
+      router.push('user');
+    }
 
     onMounted(() => {
       console.log('onMounted==', $route);
@@ -160,6 +164,7 @@ export default {
     return {
       ...toRefs(params),
       btclick,
+      userClick,
       carouselImg,
       prodImg,
       menu_my,
@@ -200,6 +205,7 @@ export default {
             height: 64px;
             border-radius: 50%;
             background: #999;
+            cursor: pointer;
             // img {
             //   width: 100%;
             // }

@@ -86,8 +86,8 @@
         </div>
       </div>
       <div class="orderBuyForm">
-        <el-button class="orderButtonOne">单独下单</el-button>
-        <el-button class="orderButtonMore">批量下单</el-button>
+        <el-button class="orderButton orderButtonChecked">单独下单</el-button>
+        <el-button class="orderButton">批量下单</el-button>
         <el-form :model="formData" label-width="80px" class="orderForm">
           <el-form-item label="选择颜色">
             <el-select v-model="formData.region" placeholder="请选择颜色">
@@ -280,13 +280,13 @@ export default {
     margin-top: 15px;
     padding-top: 10px;
     border-top: 1px solid rgba(0, 0, 0, 0.07);
-    .orderButtonOne,.orderButtonMore {
+    .orderButton {
       width: 170px;
       height: 56px;
       font-size: 20px;
       font-weight: bold;
     }
-    .orderButtonOne {
+    .orderButtonChecked {
       border-color: rgba(194, 0, 34, 1);
       color: rgba(194, 0, 34, 1);
     }

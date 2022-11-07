@@ -17,7 +17,7 @@
             <div class="dropdownGet">
               <div class="dropdownBox">
                 <div class="headerBox">
-                  <div class="headerPic">
+                  <div class="headerPic" @click="userClick">
                     <!-- <img :src="prodImg" alt=""> -->
                   </div>
                   <div class="headerTxt">
@@ -95,6 +95,10 @@ export default {
     Forget
   },
   setup() {
+
+    const router = useRouter();
+    const $route = useRoute();
+
     const RegisterRef = ref();
     const LoginRef = ref();
     const ForgetRef = ref();
@@ -111,6 +115,10 @@ export default {
     const forgetClick = () => {
       ForgetRef.value.open()
     }
+    // 进入用户信息页面
+    const userClick = () => {
+      router.push('user');
+    }
 
     return {
       RegisterRef,
@@ -120,6 +128,7 @@ export default {
       registerClick,
       loginClick,
       forgetClick,
+      userClick,
       prodImg,
       menu_my,
       menu_order,
@@ -190,6 +199,7 @@ export default {
                 height: 97px;
                 border-radius: 50%;
                 background: #999;
+                cursor: pointer;
                 // img {
                 //   width: 100%;
                 // }
