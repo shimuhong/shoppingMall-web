@@ -68,9 +68,10 @@ export default {
         type: 'warning',
       })
       request({
-        url: '/djstockorder-api/placeOrder/revocation',
+        url: '/user/login',
         data: {
-          placeOrderId: 111
+          "account":"zhangsan",
+          "password":123456
         },
       }).then(res => {
         console.log('sss:', res)
