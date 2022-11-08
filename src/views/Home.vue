@@ -133,7 +133,7 @@ export default {
 
       // 轮播列表
       request({
-        url: '/index/get_carousel_list',
+        url: '/index_new/get_carousel_list',
         data: {
           "uid":"14",
         },
@@ -142,7 +142,7 @@ export default {
       })
       // 公告列表
       request({
-        url: '/index/get_noticelist',
+        url: '/index_new/get_noticelist',
         data: {
           "uid":"14",
           "token":''
