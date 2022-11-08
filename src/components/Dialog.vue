@@ -9,9 +9,7 @@
     <template v-if="hasHeader" #header="{ close, titleId, titleClass }">
       <div class="dialogHeader">
         <h4 :id="titleId" :class="titleClass">{{title}}</h4>
-        <el-button type="danger" @click="close">
-          Close
-        </el-button>
+        <img :src="icon_close"  @click="close"/>
       </div>
     </template>
     <div class="dialogContent">
@@ -21,6 +19,7 @@
 </template>
 <script>
 import { ref, onMounted, reactive, toRefs } from 'vue';
+import icon_close from '@/assets/icon_close.png';
 export default {
   name: 'Dialog',
   components: {
@@ -58,7 +57,8 @@ export default {
     return {
       ...toRefs(params),
       open,
-      close
+      close,
+      icon_close
     };
   }
 }
@@ -69,14 +69,24 @@ export default {
   border-radius: 32px;
   line-height: normal;
 }
+.el-dialog.dialog .dialogHeader {
+  display: flex;
+  justify-content: space-between;
+}
+.el-dialog.dialog .dialogHeader img {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
 .el-dialog.dialog .el-dialog__header {
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 20px;
+  margin: 0;
 }
 .el-dialog.dialog .el-dialog__body {
-  padding: 50px 75px;
+  /* padding: 50px 75px; */
+  padding: 10px 20px 20px;
 }
 .el-dialog.dialog .el-dialog__body .dialogContent {
-  min-height: 100px;
+  min-height: 50px;
 }
 </style>

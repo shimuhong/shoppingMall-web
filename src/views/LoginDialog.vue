@@ -1,19 +1,13 @@
 <template>
-  <SDialog ref="DialogRef" class="forgetDialog">
+  <SDialog ref="DialogRef" class="loginDialog">
       <h3>
-        忘记密码
+        登录
       </h3>
-      <el-input v-model="userName" placeholder="请输入注册的手机号/邮箱" >
+      <el-input v-model="userName" placeholder="请输入5位长度以上的账号" >
         <template #prefix>
           <img :src="icon_userName" >
         </template>
       </el-input>
-
-      <div class="messageBox btnBox">
-        <el-input v-model="verificationCode" placeholder="请输入验证码" />
-        <el-button type="primary">获取验证码</el-button>
-      </div>
-
       <el-input
         v-model="password"
         type="password"
@@ -21,20 +15,22 @@
         show-password
       >
         <template #prefix>
-          <div class="pwdPrefix">
-            密码
-          </div>
+          <img :src="icon_password" >
         </template>
       </el-input>
       <div class="checkedBox">
         <el-checkbox v-model="isChecked" size="large">我已同意协议</el-checkbox>
-        <div class="txt">
-          
+        <div class="txt" @click="forgetClick">
+          忘记密码？
         </div>
       </div>
       <div class="btnBox">
-        <el-button type="primary" @click="resetAPIClick">立即重置</el-button>
+        <el-button type="primary" @click="loginAPIClick">登录</el-button>
       </div>
+      <div class="btnBox">
+        <el-button class="default" @click="registerOpenClick">去注册</el-button>
+      </div>
+      
       
   </SDialog>
 </template>
@@ -46,9 +42,8 @@ import icon_password from '@/assets/icon_password.png';
 import icon_qq from '@/assets/icon_qq.png';
 import { ElMessage } from 'element-plus'
 import request from '@/utils/request/index.js';
-
 export default {
-  name: 'Dialog',
+  name: 'RegisterDialog',
   components: {
     SDialog
   },
@@ -57,7 +52,6 @@ export default {
     const params = reactive({
       userName: '',
       password: '',
-      verificationCode: '',
       isChecked: false,
     });
     
@@ -66,23 +60,40 @@ export default {
       DialogRef.value.open();
     }
 
-    const resetAPIClick = () => {
+    const loginAPIClick = () => {
 
       console.log('loginClick:', import.meta.env)
-      ElMessage({
-        message: '报错了！',
-        type: 'warning',
-      })
+      if (params.isChecked) {
+        ElMessage({
+          message: '报错了！',
+          type: 'warning',
+        })
+        return
+      }
+      
       request({
-        url: '/djstockorder-api/placeOrder/revocation',
+        url: '/user/login',
         data: {
-          placeOrderId: 111
+          "account": params.userName,
+          "password": params.password
         },
       }).then(res => {
         console.log('sss:', res)
       }).catch((err) => {
         console.log('err:', err)
       });
+    }
+    
+    // 忘记密码
+    const forgetClick = () => {
+      DialogRef.value.close();
+      emit('forgetClick')
+    }
+
+    // 去注册
+    const registerOpenClick = () => {
+      DialogRef.value.close();
+      emit('registerOpenClick')
     }
 
     return {
@@ -92,35 +103,23 @@ export default {
       icon_userName,
       icon_password,
       icon_qq,
-      resetAPIClick,
+      loginAPIClick,
+      registerOpenClick,
+      forgetClick
     };
   }
 }
 </script>
 
 <style>
-.dialogContent h3 {
+.loginDialog .dialogContent h3 {
   font-size: 32px;
   font-weight: bold;
   color: #333;
   padding-bottom: 38px;
 }
-.messageBox {
-  display: flex;
-}
 
-.forgetDialog .dialogContent .pwdPrefix {
-  padding-right: 10px;
-  margin-right: 15px;
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
-}
-.dialogContent .messageBox.btnBox .el-button {
-  height: 52px;
-  width: 160px;
-  margin-left: 7px;
-}
-
-.forgetDialog .dialogContent .checkedBox {
+.loginDialog .dialogContent .checkedBox {
   display: flex;
   height: 40px;
   line-height: 40px;
@@ -129,51 +128,57 @@ export default {
   margin-bottom: 50px;
 
 }
-.dialogContent .checkedBox .el-checkbox--large .el-checkbox__inner {
+.loginDialog .dialogContent {
+  padding: 30px 55px;
+}
+.loginDialog .dialogContent .checkedBox .txt {
+  cursor: pointer;
+}
+.loginDialog .dialogContent .checkedBox .el-checkbox--large .el-checkbox__inner {
   width: 27px;
   height: 27px;
   border-radius: 7px;
   /* background: #F4F4F4 ; */
 }
-.dialogContent .checkedBox .el-checkbox--large .el-checkbox__inner::after {
+.loginDialog .dialogContent .checkedBox .el-checkbox--large .el-checkbox__inner::after {
   height: 14px;
   left: 9px;
   top: 2px;
   width: 8px;
   
 }
-.dialogContent .checkedBox .txt {
+.loginDialog .dialogContent .checkedBox .txt {
   color: #BA0124;
 }
 
-.dialogContent .el-input{
+.loginDialog .dialogContent .el-input{
   height: 52px;
   margin-bottom: 22px;
 }
-.dialogContent .el-input .el-input__wrapper {
+.loginDialog .dialogContent .el-input .el-input__wrapper {
   background: #F7F7F7;
   border-radius: 14px;
   padding-left: 23px;
 }
-.dialogContent .el-input .el-input__wrapper .el-input__prefix img{
+.loginDialog .dialogContent .el-input .el-input__wrapper .el-input__prefix img{
   height: 25px;
 }
 
-.dialogContent .btnBox {
+.loginDialog .dialogContent .btnBox {
   text-align: center;
   margin-top: 26px;
 }
-.dialogContent .btnBox .el-button {
+.loginDialog .dialogContent .btnBox .el-button {
   width: 406px;
   height: 60px;
   border-radius: 14px;
 }
-.dialogContent .btnBox .el-button.el-button--primary {
+.loginDialog .dialogContent .btnBox .el-button.el-button--primary {
   background: #BA0124;
   color: #fff;
   border: none;
 }
-.dialogContent .btnBox .el-button.default {
+.loginDialog .dialogContent .btnBox .el-button.default {
   border:1px solid #BA0124;
   color: #BA0124;
 }

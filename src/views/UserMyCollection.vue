@@ -1,6 +1,6 @@
 <template>
   <!-- 我的收藏 -->
-  <div class="userCont">
+  <div class="UserMyCollection">
     我的收藏
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <!-- 我的钱包 -->
-  <div class="userCont">
+  <div class="UserMyWallet">
     我的钱包
   </div>
 </template>

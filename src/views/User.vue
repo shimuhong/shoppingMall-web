@@ -13,28 +13,34 @@
           <div class="balanceTxt">余额</div>
           <div class="balance">2345.00</div>
           <div class="btnBox">
-            <el-button type="primary">充值</el-button>
-            <el-button class="getPrice">提现</el-button>
+            <el-button type="primary" @click="rechargeClick">充值</el-button>
+            <el-button class="getPrice" @click="withdrawalClick">提现</el-button>
           </div>
         </div>
         <el-menu
           class="el-menu-vertical-warp"
           default-active="1"
         >
+          
           <el-menu-item index="1" @click="menuClick('UserPersonal', '个人中心')">
-            <div>个人中心</div>
+            <img :src="compName === 'UserPersonal' ? icon_UserPersonal_pick : icon_UserPersonal" />
+            <div class="title">个人中心</div>
           </el-menu-item>
           <el-menu-item index="2" @click="menuClick('UserMyOrder', '我的订单')">
-            <div>我的订单</div>
+            <img :src="compName === 'UserMyOrder' ? icon_UserMyOrder_pick : icon_UserMyOrder" />
+            <div class="title">我的订单</div>
           </el-menu-item>
           <el-menu-item index="3" @click="menuClick('UserMyCollection', '我的收藏')">
-            <div>我的收藏</div>
+            <img :src="compName === 'UserMyCollection' ? icon_UserMyCollection_pick : icon_UserMyCollection" />
+            <div class="title">我的收藏</div>
           </el-menu-item>
           <el-menu-item index="4" @click="menuClick('UserMyWallet', '我的钱包')">
-            <div>我的钱包</div>
+            <img :src="compName === 'UserMyWallet' ? icon_UserMyWallet_pick : icon_UserMyWallet" />
+            <div class="title">我的钱包</div>
           </el-menu-item>
           <el-menu-item index="5" @click="menuClick('UserCashAdmin', '提现管理')">
-            <div>提现管理</div>
+            <img :src="compName === 'UserCashAdmin' ? icon_UserCashAdmin_pick : icon_UserCashAdmin" />
+            <div class="title">提现管理</div>
           </el-menu-item>
         </el-menu>
       </div>
@@ -54,21 +60,10 @@
         </div>
       </div>
     </div>
-
-    <!-- 测试 -->
-    <!-- <el-button @click="btclick">
-      点击
-    </el-button>
-    <div>
-      home page
-    </div> -->
-
-    <!-- 中间内容区路由切换 -->
-    <!-- <router-view v-slot="{ Component }">
-      <keep-alive>
-        <component :is="Component" :key="$router.name"/>
-      </keep-alive>
-    </router-view> -->
+    <!-- 充值弹层 -->
+    <UserRechargeDialog ref="UserRechargeDialogRef" />
+    <!-- 提现弹层 -->
+    <UserWithdrawalDialog ref="UserWithdrawalDialogRef" />
   </div>
 </template>
 <script>
@@ -76,33 +71,54 @@ import { useRouter, useRoute } from 'vue-router';
 import { ref, onMounted, reactive, toRefs } from 'vue';
 import carouselImg from '@/assets/carouselImg.png';
 import prodImg from '@/assets/prodImg.png';
+
+import icon_UserPersonal from '@/assets/icon_UserPersonal.png';
+import icon_UserPersonal_pick from '@/assets/icon_UserPersonal_pick.png';
+import icon_UserMyOrder from '@/assets/icon_UserMyOrder.png';
+import icon_UserMyOrder_pick from '@/assets/icon_UserMyOrder_pick.png';
+import icon_UserMyCollection from '@/assets/icon_UserMyCollection.png';
+import icon_UserMyCollection_pick from '@/assets/icon_UserMyCollection_pick.png';
+import icon_UserMyWallet from '@/assets/icon_UserMyWallet.png';
+import icon_UserMyWallet_pick from '@/assets/icon_UserMyWallet_pick.png';
+import icon_UserCashAdmin from '@/assets/icon_UserCashAdmin.png';
+import icon_UserCashAdmin_pick from '@/assets/icon_UserCashAdmin_pick.png';
+
 import UserPersonal from './UserPersonal.vue';
 import UserMyOrder from './UserMyOrder.vue';
 import UserMyCollection from './UserMyCollection.vue';
 import UserMyWallet from './UserMyWallet.vue';
 import UserCashAdmin from './UserCashAdmin.vue';
+import UserRechargeDialog from './UserRechargeDialog.vue';
+import UserWithdrawalDialog from './UserWithdrawalDialog.vue';
 
 export default {
-  name: 'home',
+  name: 'user',
   components: {
     UserPersonal,
     UserMyOrder,
     UserMyCollection,
     UserMyWallet,
     UserCashAdmin,
+    UserRechargeDialog,
+    UserWithdrawalDialog
   },
   setup() {
     const router = useRouter();
     const $route = useRoute();
-
+    const UserRechargeDialogRef = ref();
+    const UserWithdrawalDialogRef = ref()
     const params = reactive({
       compName: 'UserPersonal',
       menuTilte: '个人中心',
     });
 
-    const btclick = () => {
-      console.log('btclick==')
-      router.push('page1');
+    // 充值
+    const rechargeClick = () => {
+      UserRechargeDialogRef.value.open();
+    }
+    // 充值
+    const withdrawalClick = () => {
+      UserWithdrawalDialogRef.value.open();
     }
 
     // 进入订货页
@@ -120,10 +136,23 @@ export default {
 
     return {
       ...toRefs(params),
-      btclick,
+      rechargeClick,
+      withdrawalClick,
       carouselImg,
       prodImg,
-      menuClick
+      icon_UserPersonal,
+      icon_UserPersonal_pick,
+      icon_UserMyOrder,
+      icon_UserMyOrder_pick,
+      icon_UserMyCollection,
+      icon_UserMyCollection_pick,
+      icon_UserMyWallet,
+      icon_UserMyWallet_pick,
+      icon_UserCashAdmin,
+      icon_UserCashAdmin_pick,
+      menuClick,
+      UserRechargeDialogRef,
+      UserWithdrawalDialogRef
     };
   }
 }
@@ -227,53 +256,13 @@ $contPadding: 14px;
           color: #333;
           height: 46px;
           display: flex;
-          justify-content: space-between;
+          // justify-content: space-between;
           position: relative;
-          .tipBox {
-            // background: #000;
-            width: 5px;
-            position: absolute;
-            right: -4px;
-            top: 0;
-            height: 100%;
-            display: none;
-            .tipCont {
-              padding: 25px;
-              min-width: 100px;
-              position: absolute;
-              left: 3px;
-              top: 0;
-              background: #fff;
-              color: #333;
-              border-radius: 14px;
-              z-index: 1;
-              box-shadow: 5px 0 20px -5px #ccc;
-              width: max-content;
-              max-width: 770px;
-              .tipItem {
-                float: left;
-                display: flex;
-                margin-right: 25px;
-                cursor: pointer;
-                img {
-                  width: 49px;
-                  height: 49px;
-                }
-                .title {
-                  font-weight: bold;
-                }
-                &:hover {
-                  color: #BA0124;
-                }
-              }
-            }
+          .title {
+            padding-left: 10px;
           }
           &:hover {
-            color: #fff;
-            background: #BA0124;
-            .tipBox {
-              display: block;
-            }
+            background: rgba(186, 1, 36, 0.1);
           }
         }
         .el-menu-item.is-active {
@@ -299,7 +288,7 @@ $contPadding: 14px;
       .contComp {
         min-height: 200px;
         background: #fff;
-        padding: 20px 35px;
+        padding: 20px 35px 35px;
       }
     }
   }

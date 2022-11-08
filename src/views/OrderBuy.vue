@@ -80,8 +80,8 @@
           <div class="label">
             点击收藏
           </div>
-          <div class="value">
-            <img :src="icon_collection" alt="">
+          <div class="value" @click="collectionClick">
+            <img :src="isCollection ? icon_collection_pick : icon_collection" alt="" >
           </div>
         </div>
       </div>
@@ -134,6 +134,7 @@ import priceUp from '@/assets/priceUp.png';
 import icon_left from '@/assets/icon_left.png';
 import icon_right from '@/assets/icon_right.png';
 import icon_collection from '@/assets/icon_collection.png';
+import icon_collection_pick from '@/assets/icon_collection_pick.png';
 import pic1 from '@/assets/pic1.jpeg';
 export default {
   name: 'orderBuy',
@@ -144,6 +145,7 @@ export default {
     const $route = useRoute();
 
     const params = reactive({
+      isCollection: false,
       formData: {
         num: 1,
       },
@@ -153,6 +155,10 @@ export default {
     const btclick = () => {
       console.log('btclick==')
       router.push('page1');
+    }
+    // 点击收藏
+    const collectionClick = () => {
+      params.isCollection = !params.isCollection;
     }
 
     onMounted(() => {
@@ -169,6 +175,8 @@ export default {
       icon_left,
       icon_right,
       icon_collection,
+      icon_collection_pick,
+      collectionClick,
       pic1
     };
   }

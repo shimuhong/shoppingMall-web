@@ -1,6 +1,6 @@
 <template>
   <!-- 我的订单 -->
-  <div class="userCont">
+  <div class="UserMyOrder">
     我的订单
   </div>
 </template>

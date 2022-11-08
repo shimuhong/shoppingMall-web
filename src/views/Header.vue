@@ -65,11 +65,11 @@
         </div>
       </div>
       <!-- 登录 -->
-      <Login ref="LoginRef" @registerOpenClick="registerClick" @forgetClick="forgetClick"/>
+      <LoginDialog ref="LoginDialogRef" @registerOpenClick="registerClick" @forgetClick="forgetClick"/>
       <!-- 注册 -->
-      <Register ref="RegisterRef" />
+      <RegisterDialog ref="RegisterDialogRef" />
       <!-- 忘记密码 -->
-      <Forget ref="ForgetRef" />
+      <ForgetDialog ref="ForgetDialogRef" />
     </el-header>
 </template>
 <script>
@@ -84,36 +84,36 @@ import menu_my from '@/assets/menu_my.png';
 import menu_order from '@/assets/menu_order.png';
 import menu_get from '@/assets/menu_get.png';
 import menu_bag from '@/assets/menu_bag.png';
-import Login from '@/views/Login.vue';
-import Register from '@/views/Register.vue';
-import Forget from '@/views/Forget.vue';
+import LoginDialog from '@/views/LoginDialog.vue';
+import RegisterDialog from '@/views/RegisterDialog.vue';
+import ForgetDialog from '@/views/ForgetDialog.vue';
 export default {
   name: 'app',
   components: {
-    Login,
-    Register,
-    Forget
+    LoginDialog,
+    RegisterDialog,
+    ForgetDialog
   },
   setup() {
 
     const router = useRouter();
     const $route = useRoute();
 
-    const RegisterRef = ref();
-    const LoginRef = ref();
-    const ForgetRef = ref();
+    const RegisterDialogRef = ref();
+    const LoginDialogRef = ref();
+    const ForgetDialogRef = ref();
     
     // 注册
     const registerClick = () => {
-      RegisterRef.value.open()
+      RegisterDialogRef.value.open()
     }
     // 登录
     const loginClick = () => {
-      LoginRef.value.open()
+      LoginDialogRef.value.open()
     }
     // 忘记密码
     const forgetClick = () => {
-      ForgetRef.value.open()
+      ForgetDialogRef.value.open()
     }
     // 进入用户信息页面
     const userClick = () => {
@@ -121,9 +121,9 @@ export default {
     }
 
     return {
-      RegisterRef,
-      LoginRef,
-      ForgetRef,
+      RegisterDialogRef,
+      LoginDialogRef,
+      ForgetDialogRef,
       logo,
       registerClick,
       loginClick,

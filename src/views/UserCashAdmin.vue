@@ -1,6 +1,6 @@
 <template>
   <!-- 提现管理 -->
-  <div class="userCont">
+  <div class="UserCashAdmin">
     提现管理
   </div>
 </template>

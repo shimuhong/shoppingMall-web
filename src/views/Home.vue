@@ -22,9 +22,9 @@
           class="el-menu-vertical-warp"
           default-active="1"
         >
-          <el-menu-item index="1">
+          <el-menu-item index="1" @click="menuClick('1')">
             <div>手机</div>
-            <div>></div>
+            <img class="icon_go" :src="menuChecked === '1' ? icon_menu_go_pick : icon_menu_go" />
             <div class="tipBox">
               <div class="tipCont">
                 <div class="tipItem" v-for="it in 10" :key="it">
@@ -36,29 +36,29 @@
               </div>
             </div>
           </el-menu-item>
-          <el-menu-item index="2">
+          <el-menu-item index="2" @click="menuClick('2')">
             <div>电视</div>
-            <div>></div>
+            <img class="icon_go" :src="menuChecked === '2' ? icon_menu_go_pick : icon_menu_go" />
           </el-menu-item>
-          <el-menu-item index="3">
+          <el-menu-item index="3" @click="menuClick('3')">
             <div>笔记本&nbsp;&nbsp;平板</div>
-            <div>></div>
+            <img class="icon_go" :src="menuChecked === '3' ? icon_menu_go_pick : icon_menu_go" />
           </el-menu-item>
-          <el-menu-item index="4">
+          <el-menu-item index="4" @click="menuClick('4')">
             <div>穿戴</div>
-            <div>></div>
+            <img class="icon_go" :src="menuChecked === '4' ? icon_menu_go_pick : icon_menu_go" />
           </el-menu-item>
-          <el-menu-item index="5">
+          <el-menu-item index="5" @click="menuClick('5')">
             <div>家电</div>
-            <div>></div>
+            <img class="icon_go" :src="menuChecked === '5' ? icon_menu_go_pick : icon_menu_go" />
           </el-menu-item>
-          <el-menu-item index="6">
+          <el-menu-item index="6" @click="menuClick('6')">
             <div>智能&nbsp;&nbsp;路由器</div>
-            <div>></div>
+            <img class="icon_go" :src="menuChecked === '6' ? icon_menu_go_pick : icon_menu_go" />
           </el-menu-item>
-          <el-menu-item index="7">
+          <el-menu-item index="7" @click="menuClick('7')">
             <div>生活&nbsp;&nbsp;箱包</div>
-            <div>></div>
+            <img class="icon_go" :src="menuChecked === '7' ? icon_menu_go_pick : icon_menu_go" />
           </el-menu-item>
         </el-menu>
       </div>
@@ -96,7 +96,10 @@ import { useRouter, useRoute } from 'vue-router';
 import { ref, onMounted, reactive, toRefs } from 'vue';
 import carouselImg from '@/assets/carouselImg.png';
 import prodImg from '@/assets/prodImg.png';
+import icon_menu_go from '@/assets/icon_menu_go.png';
+import icon_menu_go_pick from '@/assets/icon_menu_go_pick.png';
 import icon_broadcast from '@/assets/icon_broadcast.png';
+import request from '@/utils/request/index.js';
 
 export default {
   name: 'home',
@@ -108,6 +111,7 @@ export default {
     const $route = useRoute();
 
     const params = reactive({
+      menuChecked: '1',
     });
 
     const btclick = () => {
@@ -120,9 +124,32 @@ export default {
       router.push('order');
     }
 
+    const menuClick = (ind) => {
+      params.menuChecked = ind
+    }
+
     onMounted(() => {
       console.log('onMounted==', $route);
 
+      // 轮播列表
+      request({
+        url: '/index/get_carousel_list',
+        data: {
+          "uid":"14",
+        },
+      }).then(res => {
+        console.log('res:', res)
+      })
+      // 公告列表
+      request({
+        url: '/index/get_noticelist',
+        data: {
+          "uid":"14",
+          "token":''
+        },
+      }).then(res => {
+        console.log('res:', res)
+      })
 
     });
 
@@ -132,6 +159,9 @@ export default {
       btclick,
       carouselImg,
       prodImg,
+      icon_menu_go,
+      icon_menu_go_pick,
+      menuClick,
       icon_broadcast,
       prodClick
     };
@@ -203,6 +233,9 @@ $contPadding: 14px;
           display: flex;
           justify-content: space-between;
           position: relative;
+          .icon_go {
+            height: 13px;
+          }
           .tipBox {
             // background: #000;
             width: 5px;
@@ -243,8 +276,7 @@ $contPadding: 14px;
             }
           }
           &:hover {
-            color: #fff;
-            background: #BA0124;
+            background: rgba(186, 1, 36, 0.1);
             .tipBox {
               display: block;
             }
