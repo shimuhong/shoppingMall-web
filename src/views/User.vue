@@ -5,10 +5,12 @@
       <!-- 左侧菜单 -->
       <div class="navBarLeft">
         <div class="userTop">
+          <div class="tip">VIP</div>
           <div class="headerPic">
-            <div class="tip">VIP</div>
+            <img :src="userinfo.avatar" alt="">
+            
           </div>
-          <div class="name">会员昵称</div>
+          <div class="name">{{userinfo.nickname}}</div>
           <div class="number">编号：12323121</div>
           <div class="balanceTxt">余额</div>
           <div class="balance">2345.00</div>
@@ -48,7 +50,7 @@
         <div class="contTitle">{{menuTilte}}</div>
         <div class="contComp" :class="compName === 'UserMyCollection' ? 'backNone' : ''">
           <!-- 个人中心 -->
-          <UserPersonal v-show="compName === 'UserPersonal'" />
+          <UserPersonal v-show="compName === 'UserPersonal'" :userinfo="userinfo"/>
           <!-- 我的订单 -->
           <UserMyOrder v-show="compName === 'UserMyOrder'" />
           <!-- 我的收藏 -->
@@ -71,7 +73,8 @@ import { useRouter, useRoute } from 'vue-router';
 import { ref, onMounted, reactive, toRefs } from 'vue';
 import carouselImg from '@/assets/carouselImg.png';
 import prodImg from '@/assets/prodImg.png';
-
+import request from '@/utils/request/index.js';
+import storage from 'store'
 import icon_UserPersonal from '@/assets/icon_UserPersonal.png';
 import icon_UserPersonal_pick from '@/assets/icon_UserPersonal_pick.png';
 import icon_UserMyOrder from '@/assets/icon_UserMyOrder.png';
@@ -110,6 +113,7 @@ export default {
     const params = reactive({
       compName: 'UserPersonal',
       menuTilte: '个人中心',
+      userinfo: {},
     });
 
     // 充值
@@ -129,8 +133,17 @@ export default {
 
     onMounted(() => {
       console.log('onMounted==', $route);
-
-
+      params.userinfo = storage.get('userinfo');
+      // 个人中心
+      request({
+        url: '/user/get_user_info',
+        data: {
+          "uid": params.userinfo.id //用户id
+        },
+      }).then(res => {
+        console.log('sss:', res);
+        params.userinfo = res.data;
+      })
     });
 
 
@@ -207,19 +220,25 @@ $contPadding: 14px;
           background: #ccc;
           margin: 0 auto;
           position: relative;
-          .tip {
-            position: absolute;
-            right: -10px;
-            top: -9px;
-            background: rgba(186, 1, 36, 1);
-            color: #fff;
-            width: 40px;
-            height: 18px;
-            line-height: 18px;
-            font-size: 13px;
-            border-radius: 9px;
-            
+          overflow: hidden;
+          img {
+            width: 100%;
           }
+          
+        }
+        .tip {
+          position: absolute;
+          right: 72px;
+          top: -9px;
+          z-index: 1;
+          background: rgba(186, 1, 36, 1);
+          color: #fff;
+          width: 40px;
+          height: 18px;
+          line-height: 18px;
+          font-size: 13px;
+          border-radius: 9px;
+          
         }
         .name {
           color: rgba(51, 51, 51, 1);

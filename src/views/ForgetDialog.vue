@@ -3,7 +3,7 @@
       <h3>
         忘记密码
       </h3>
-      <el-input v-model="userName" placeholder="请输入注册的手机号/邮箱" >
+      <el-input v-model="phone" placeholder="请输入注册的手机号" maxlength="11">
         <template #prefix>
           <img :src="icon_userName" >
         </template>
@@ -11,7 +11,7 @@
 
       <div class="messageBox btnBox">
         <el-input v-model="verificationCode" placeholder="请输入验证码" />
-        <el-button type="primary">获取验证码</el-button>
+        <el-button type="primary" @click="getSmsClick">获取验证码</el-button>
       </div>
 
       <el-input
@@ -59,6 +59,7 @@ export default {
       password: '',
       verificationCode: '',
       isChecked: false,
+      phone: ''
     });
     
     const open = () => {
@@ -85,6 +86,29 @@ export default {
       });
     }
 
+    const getSmsClick = () => {
+      if (params.phone.length !== 11) {
+        ElMessage({
+          message: '请输入正确的手机号',
+          type: 'warning',
+        })
+        return
+      }
+
+      request({
+        url: '/sms_send/get_sms_send',
+        data: {
+          phone: params.phone
+        },
+      }).then(res => {
+        console.log('sss:', res)
+        ElMessage({
+          message: res.msg,
+          type: 'success',
+        })
+      })
+    }
+
     return {
       ...toRefs(params),
       open,
@@ -93,6 +117,7 @@ export default {
       icon_password,
       icon_qq,
       resetAPIClick,
+      getSmsClick
     };
   }
 }

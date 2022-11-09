@@ -2,8 +2,8 @@
   <div class="homeCont">
     <!-- 轮播 -->
     <el-carousel class="carousel">
-      <el-carousel-item v-for="item in 3" :key="item">
-        <img :src="carouselImg" alt="">
+      <el-carousel-item v-for="item in carouselList" :key="item.id">
+        <img :src="item.image" alt="">
       </el-carousel-item>
     </el-carousel>
     <!-- 广播 -->
@@ -112,6 +112,7 @@ export default {
 
     const params = reactive({
       menuChecked: '1',
+      carouselList: []
     });
 
     const btclick = () => {
@@ -139,6 +140,7 @@ export default {
         },
       }).then(res => {
         console.log('res:', res)
+        params.carouselList = res.data;
       })
       // 公告列表
       request({
@@ -184,7 +186,8 @@ $contPadding: 14px;
         background: #444;
         img {
           width: 100%;
-          min-height: 418px;
+          // min-height: 418px;
+          height: 100%;
         }
       }
     }

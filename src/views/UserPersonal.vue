@@ -14,62 +14,126 @@
         VIPI
       </div>
       <div class="level">
-        会员等级
+        会员等级 {{userinfo.level}} 级
       </div>
     </div>
     <!-- 账号设置 -->
     <div v-show="radioValue === '2'" class="radioCont userConfig">
       <el-form :model="modelData" label-width="85px" size="large">
         <el-form-item label="会员昵称：">
-          <el-input v-model="modelData.name" placeholder="请输入会员昵称" />
+          <el-input v-model="modelData.nickname" placeholder="请输入会员昵称" />
         </el-form-item>
         <el-form-item label="电话号码：">
-          <el-input v-model="modelData.name" placeholder="请输入电话号码" />
+          <el-input v-model="modelData.mobile" placeholder="请输入电话号码" />
         </el-form-item>
         <el-form-item label="QQ号码：">
-          <el-input v-model="modelData.name" placeholder="请输入QQ号码" />
+          <el-input v-model="modelData.qq" placeholder="请输入QQ号码" />
         </el-form-item>
         <el-form-item label="头像：">
           上传
         </el-form-item>
       </el-form>
-      <el-button type="primary">保存</el-button>
+      <el-button type="primary" @click="setUserClick">保存</el-button>
     </div>
     <!-- 修改密码 -->
     <div v-show="radioValue === '3'" class="radioCont userConfig">
       <el-form :model="modelData" label-width="100px" size="large">
         <el-form-item label="原密码：">
-          <el-input v-model="modelData.name" placeholder="请输入原密码" />
+          <el-input v-model="modelData.oldpwd" placeholder="请输入原密码" type="password" show-password/>
         </el-form-item>
         <el-form-item label="新密码：">
-          <el-input v-model="modelData.name" placeholder="请输入新密码" />
+          <el-input v-model="modelData.newpwd" placeholder="请输入新密码"  type="password" show-password/>
         </el-form-item>
         <el-form-item label="重复新密码：">
-          <el-input v-model="modelData.name" placeholder="请输再次入新密码" />
+          <el-input v-model="modelData.confirmpwd" placeholder="请输再次入新密码"  type="password" show-password/>
         </el-form-item>
       </el-form>
-      <el-button type="primary">修改</el-button>
+      <el-button type="primary" @click="updatepwdClick">修改</el-button>
     </div>
   </div>
 </template>
 <script>
 import { ref, onMounted, reactive, toRefs } from 'vue';
 import card_vip from '@/assets/card_vip.png';
-
+import request from '@/utils/request/index.js';
+import { ElMessage } from 'element-plus'
+import storage from 'store'
 export default {
   name: 'UserPersonal',
   components: {
   },
+  props: {
+    userinfo: {
+      type: Object,
+      default: () => {},
+    },
+  },
   setup() {
 
     const params = reactive({
-      modelData: {},
+      modelData: {
+        oldpwd: '',
+        newpwd: '',
+        confirmpwd: '',
+        nickname: '',
+        qq: '',
+        mobile: '',
+        avatar: '',
+      },
       radioValue: '1'
     });
+    // 账号设置
+    const setUserClick = () => {
+      request({
+        url: '/new_index/set_user_index',
+        data: {
+          "uid": storage.get('userinfo').id, //用户id
+          "nickname": params.modelData.nickname,//用户昵称
+          "qq": params.modelData.qq,//用户qq
+          "mobile": params.modelData.mobile,//用户手机号
+          "avatar": params.modelData.avatar,//用户头像
+        },
+      }).then(res => {
+        console.log('sss:', res)
+        ElMessage({
+          message: res.msg,
+          type: 'success',
+        })
+      })
+    }
+
+    // 修改密码
+    const updatepwdClick = () => {
+      if (params.modelData.newpwd !== params.modelData.confirmpwd) {
+        ElMessage({
+          message: '新密码两次输入不一致，请重新输入！',
+          type: 'warning',
+        })
+        return;
+      }
+      request({
+        url: '/user/updatepwd',
+        data: {
+          "type":"pwd",//类型：pwd修改密码
+          "uid": storage.get('userinfo').id, //用户id
+          "oldpwd": params.modelData.oldpwd, //原来密码
+          "newpwd": params.modelData.newpwd, //新密码
+          "confirmpwd": params.modelData.confirmpwd //确认新密码
+        },
+      }).then(res => {
+        console.log('sss:', res)
+        ElMessage({
+          message: res.msg,
+          type: 'success',
+        })
+      })
+    }
 
     return {
       ...toRefs(params),
-      card_vip
+      card_vip,
+      updatepwdClick,
+      setUserClick
     };
   }
 }

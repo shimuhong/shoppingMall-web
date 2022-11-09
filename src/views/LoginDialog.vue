@@ -1,36 +1,42 @@
 <template>
   <SDialog ref="DialogRef" class="loginDialog">
-      <h3>
-        登录
-      </h3>
-      <el-input v-model="userName" placeholder="请输入5位长度以上的账号" >
-        <template #prefix>
-          <img :src="icon_userName" >
-        </template>
-      </el-input>
-      <el-input
-        v-model="password"
-        type="password"
-        placeholder="请输入6位以上的密码"
-        show-password
-      >
-        <template #prefix>
-          <img :src="icon_password" >
-        </template>
-      </el-input>
-      <div class="checkedBox">
-        <el-checkbox v-model="isChecked" size="large">我已同意协议</el-checkbox>
-        <div class="txt" @click="forgetClick">
-          忘记密码？
+      <div>
+        <h3>
+          登录
+        </h3>
+        <el-input v-model="userName" placeholder="请输入5位长度以上的账号" >
+          <template #prefix>
+            <img :src="icon_userName" >
+          </template>
+        </el-input>
+        <el-input
+          v-model="password"
+          type="password"
+          placeholder="请输入6位以上的密码"
+          show-password
+        >
+          <template #prefix>
+            <img :src="icon_password" >
+          </template>
+        </el-input>
+        <div class="checkedBox">
+          <el-checkbox v-model="isChecked" size="large">我已同意协议</el-checkbox>
+          <div class="txt" @click="forgetClick">
+            忘记密码？
+          </div>
+        </div>
+        <div class="btnBox">
+          <el-button type="primary" @click="loginAPIClick">登录</el-button>
+        </div>
+        <div class="btnBox">
+          <el-button class="default" @click="registerOpenClick">去注册</el-button>
         </div>
       </div>
-      <div class="btnBox">
-        <el-button type="primary" @click="loginAPIClick">登录</el-button>
-      </div>
-      <div class="btnBox">
-        <el-button class="default" @click="registerOpenClick">去注册</el-button>
-      </div>
       
+      <!-- 协议 -->
+      <div>
+
+      </div>
       
   </SDialog>
 </template>
@@ -83,12 +89,13 @@ export default {
         console.log('sss:', res)
         ElMessage({
           message: res.msg,
-          type: 'warning',
+          type: 'success',
         })
         storage.set('userinfo', res.data.userinfo);
         storage.set('uid', res.data.userinfo.id);
         storage.set('token', res.data.userinfo.token);
-        
+        DialogRef.value.close();
+        emit('loginSuccess', res.data.userinfo);
       }).catch((err) => {
         console.log('err:', err)
       });
@@ -140,6 +147,9 @@ export default {
 }
 .loginDialog .dialogContent {
   padding: 30px 55px;
+}
+.loginDialog .dialogContent .checkedBox .large {
+  cursor: pointer;
 }
 .loginDialog .dialogContent .checkedBox .txt {
   cursor: pointer;

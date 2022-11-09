@@ -1,5 +1,13 @@
 <template>
-  <SDialog ref="DialogRef" class="registerDialog">
+  <SDialog ref="DialogRef" class="registerDialog" :class="articleShow ? 'article' : ''">
+    <div v-show="articleShow" class="articleContent">
+      <div v-html="articleContent"></div>
+      <div class="buttonBox">
+        <el-button type="primary" @click="articleShow = false">我已阅读，返回注册页</el-button>
+      </div>
+      
+    </div>
+    <div  v-show="!articleShow">
       <h3>
         注册
       </h3>
@@ -24,22 +32,27 @@
         </template>
       </el-input>
     
-    <div class="verificationCode_Box">
-      <el-input v-model="captcha" placeholder="请输入验证码" />
-      <div class="codeImgBox">
-        VVVV
+      <div class="verificationCode_Box">
+        <el-input v-model="captcha" placeholder="请输入验证码" />
+        <div class="codeImgBox">
+          VVVV
+        </div>
       </div>
-    </div>
 
-    <div class="checkedBox">
-      <el-checkbox v-model="isChecked" size="large">我已同意协议</el-checkbox>
-      <div class="txt">
-        
+      <div class="checkedBox">
+        <div  class="checkedForm">
+          <el-checkbox v-model="isChecked" size="large"></el-checkbox>
+          <span @click="articleShow = true">我已同意协议</span>
+        </div>
+        <div class="txt">
+          
+        </div>
+      </div>
+      <div class="btnBox">
+        <el-button type="primary" @click="registerAPIClick">立即注册</el-button>
       </div>
     </div>
-    <div class="btnBox">
-      <el-button type="primary" @click="registerAPIClick">立即注册</el-button>
-    </div>
+      
       
   </SDialog>
 </template>
@@ -65,20 +78,43 @@ export default {
       qqNumber: '',
       captcha: '',
       isChecked: false,
+      articleShow: false,
+      articleContent: ''
     });
     
     const open = () => {
       console.log('openRegister', DialogRef.value);
       DialogRef.value.open();
+      // 获取图片验证码
+      request({
+        url: '/captcha',
+        method: 'GET',
+        data: {},
+      }).then(res => {
+        
+      })
+      request({
+        url: '/index_new/get_article_one',
+        data: {
+          "id":"14", //注册的时候协议
+        },
+      }).then(res => {
+        console.log('get_article_one:', res)
+        params.articleContent = res.data.content
+      })
     }
 
     const registerAPIClick = () => {
 
       console.log('loginClick:', import.meta.env)
-      ElMessage({
-        message: '报错了！',
-        type: 'warning',
-      })
+      if (!params.isChecked) {
+        ElMessage({
+          message: '请勾选协议！',
+          type: 'warning',
+        })
+        return
+      }
+
       request({
         url: '/user/register',
         data: {
@@ -89,6 +125,11 @@ export default {
         },
       }).then(res => {
         console.log('sss:', res)
+        ElMessage({
+          message: res.msg,
+          type: 'success',
+        })
+        DialogRef.value.close();
       }).catch((err) => {
         console.log('err:', err)
       });
@@ -109,6 +150,15 @@ export default {
 </script>
 
 <style>
+
+.registerDialog .dialogContent .articleContent .buttonBox {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.registerDialog.article .dialogContent {
+  padding: 0;
+}
 .registerDialog .dialogContent h3 {
   font-size: 32px;
   font-weight: bold;
@@ -136,6 +186,17 @@ export default {
   margin-top: -12px;
 
 }
+.registerDialog .dialogContent .checkedForm {
+  display: flex;
+}
+.registerDialog .dialogContent .checkedForm >span {
+  padding-left: 10px;
+  cursor: pointer;
+}
+.registerDialog .dialogContent .checkedForm >span:hover {
+  text-decoration: underline;
+}
+
 .registerDialog .dialogContent .checkedBox .el-checkbox--large .el-checkbox__inner {
   width: 27px;
   height: 27px;

@@ -3,26 +3,29 @@
       <div class="headerCont">
         <img :src="logo" alt="" class="logo">
         <div class="rightBox">
-          <div class="register" @click="registerClick">
+          <div @click="userinfo = {}">清token &nbsp;</div>
+          <div v-if="!userinfo.token" class="register" @click="registerClick">
             请注册
           </div>
-          <div class="login" @click="loginClick">
+          <div v-if="!userinfo.token" class="login" @click="loginClick">
             登录
           </div>
           <!-- 头像图标 -->
-          <div class="userPhotoBox">
+          <div v-else class="userPhotoBox">
             <!-- 头像 -->
-            <div class="userPhoto"></div>
+            <div class="userPhoto">
+              <img :src="userinfo.avatar" alt="">
+            </div>
             <!-- hover用户信息 -->
             <div class="dropdownGet">
               <div class="dropdownBox">
                 <div class="headerBox">
                   <div class="headerPic" @click="userClick">
-                    <!-- <img :src="prodImg" alt=""> -->
+                    <img :src="userinfo.avatar" alt="">
                   </div>
                   <div class="headerTxt">
                     <div class="nameBox">
-                      <div class="name">会员昵称</div>
+                      <div class="name">{{userinfo.nickname}}</div>
                       <div class="tag">VIP</div>
                     </div>
                     <div class="count">
@@ -65,7 +68,7 @@
         </div>
       </div>
       <!-- 登录 -->
-      <LoginDialog ref="LoginDialogRef" @registerOpenClick="registerClick" @forgetClick="forgetClick"/>
+      <LoginDialog ref="LoginDialogRef" @registerOpenClick="registerClick" @forgetClick="forgetClick" @loginSuccess="loginSuccess"/>
       <!-- 注册 -->
       <RegisterDialog ref="RegisterDialogRef" />
       <!-- 忘记密码 -->
@@ -104,6 +107,10 @@ export default {
     const LoginDialogRef = ref();
     const ForgetDialogRef = ref();
     
+    const params = reactive({
+      userinfo: {}
+    });
+
     // 注册
     const registerClick = () => {
       RegisterDialogRef.value.open()
@@ -120,12 +127,18 @@ export default {
     const userClick = () => {
       router.push('user');
     }
-
+    
+    // 登录成功
+    const loginSuccess = () => {
+      params.userinfo = storage.get('userinfo');
+    }
     onMounted(() => {
       console.log('onMounted header userinfo:', storage.get('userinfo'))
+      params.userinfo = storage.get('userinfo');
     })
 
     return {
+      ...toRefs(params),
       RegisterDialogRef,
       LoginDialogRef,
       ForgetDialogRef,
@@ -134,11 +147,13 @@ export default {
       loginClick,
       forgetClick,
       userClick,
+      loginSuccess,
       prodImg,
       menu_my,
       menu_order,
       menu_get,
-      menu_bag
+      menu_bag,
+      storage
     };
   }
 }
@@ -179,6 +194,11 @@ export default {
           background: #ccc;
           margin-left: 20px;
           cursor: pointer;
+          overflow: hidden;
+          img {
+            width: 100%;
+            display: block;
+          }
         }
         .dropdownGet {
           position: absolute;
@@ -205,9 +225,10 @@ export default {
                 border-radius: 50%;
                 background: #999;
                 cursor: pointer;
-                // img {
-                //   width: 100%;
-                // }
+                overflow: hidden;
+                img {
+                  width: 100%;
+                }
                 
               }
               .headerTxt {

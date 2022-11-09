@@ -4,7 +4,7 @@ import { ElMessage } from 'element-plus'
 import { useOnline } from '@vueuse/core';
 
 import _ from 'lodash';
-import { iconUrl } from './base64';
+// import { iconUrl } from './base64';
 const app = createApp();
 app.use(ElMessage);
 const instance = axios.create();
@@ -86,12 +86,18 @@ instance.interceptors.request.use(
 // 添加响应拦截器
 instance.interceptors.response.use(
   response => {
-    // console.log('response', response);
+    console.log('response', response);
     // ElMessage.clear();
     if (response.status == 200) {
       const { code, message, data, status } = response.data || {};
       if (code == 1) { // 成功返回
         return Promise.resolve(response.data);
+      } else if (code == 0) {
+        ElMessage({
+          message: response.data.msg,
+          type: 'warning',
+        })
+        return Promise.reject(response.data);
       } else {
         return Promise.reject(response.data);
       }
