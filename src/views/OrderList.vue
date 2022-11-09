@@ -1,11 +1,11 @@
 <template>
   <div class="orderList">
-    <el-form :model="modelData" label-width="80px">
-      <el-form-item label="订单编号">
-        <el-input v-model="modelData.name" />
+    <el-form :model="modelData" label-width="90px">
+      <el-form-item label="订单编号:">
+        <el-input v-model="modelData.name" placeholder="请输入订单编号"/>
       </el-form-item>
-      <el-form-item label="商品编号">
-        <el-input v-model="modelData.name" />
+      <el-form-item label="商品编号:">
+        <el-input v-model="modelData.name" placeholder="请输入商品编号"/>
       </el-form-item>
     </el-form>
     <el-table :data="tableData" style="width: 100%" max-height="250" class="table">

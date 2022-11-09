@@ -36,8 +36,19 @@
       <el-button type="primary">保存</el-button>
     </div>
     <!-- 修改密码 -->
-    <div v-show="radioValue === '3'" class="radioCont">
-3
+    <div v-show="radioValue === '3'" class="radioCont userConfig">
+      <el-form :model="modelData" label-width="100px" size="large">
+        <el-form-item label="原密码：">
+          <el-input v-model="modelData.name" placeholder="请输入原密码" />
+        </el-form-item>
+        <el-form-item label="新密码：">
+          <el-input v-model="modelData.name" placeholder="请输入新密码" />
+        </el-form-item>
+        <el-form-item label="重复新密码：">
+          <el-input v-model="modelData.name" placeholder="请输再次入新密码" />
+        </el-form-item>
+      </el-form>
+      <el-button type="primary">修改</el-button>
     </div>
   </div>
 </template>
