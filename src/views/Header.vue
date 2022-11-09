@@ -87,6 +87,8 @@ import menu_bag from '@/assets/menu_bag.png';
 import LoginDialog from '@/views/LoginDialog.vue';
 import RegisterDialog from '@/views/RegisterDialog.vue';
 import ForgetDialog from '@/views/ForgetDialog.vue';
+import storage from 'store'
+
 export default {
   name: 'app',
   components: {
@@ -98,7 +100,6 @@ export default {
 
     const router = useRouter();
     const $route = useRoute();
-
     const RegisterDialogRef = ref();
     const LoginDialogRef = ref();
     const ForgetDialogRef = ref();
@@ -119,6 +120,10 @@ export default {
     const userClick = () => {
       router.push('user');
     }
+
+    onMounted(() => {
+      console.log('onMounted header userinfo:', storage.get('userinfo'))
+    })
 
     return {
       RegisterDialogRef,

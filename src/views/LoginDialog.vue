@@ -42,6 +42,8 @@ import icon_password from '@/assets/icon_password.png';
 import icon_qq from '@/assets/icon_qq.png';
 import { ElMessage } from 'element-plus'
 import request from '@/utils/request/index.js';
+import storage from 'store'
+
 export default {
   name: 'RegisterDialog',
   components: {
@@ -50,8 +52,8 @@ export default {
   setup(props, { emit }) {
     const DialogRef = ref();
     const params = reactive({
-      userName: '',
-      password: '',
+      userName: 'zhangsan1',
+      password: '123456',
       isChecked: false,
     });
     
@@ -63,9 +65,9 @@ export default {
     const loginAPIClick = () => {
 
       console.log('loginClick:', import.meta.env)
-      if (params.isChecked) {
+      if (!params.isChecked) {
         ElMessage({
-          message: '报错了！',
+          message: '请勾选协议！',
           type: 'warning',
         })
         return
@@ -79,6 +81,14 @@ export default {
         },
       }).then(res => {
         console.log('sss:', res)
+        ElMessage({
+          message: res.msg,
+          type: 'warning',
+        })
+        storage.set('userinfo', res.data.userinfo);
+        storage.set('uid', res.data.userinfo.id);
+        storage.set('token', res.data.userinfo.token);
+        
       }).catch((err) => {
         console.log('err:', err)
       });

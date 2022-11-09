@@ -90,17 +90,9 @@ instance.interceptors.response.use(
     // ElMessage.clear();
     if (response.status == 200) {
       const { code, message, data, status } = response.data || {};
-      if (code == 200) {
-        return Promise.resolve(response.data);
-      } else if (code == 401) {
-        console.log('401:session time out');
-        return Promise.reject(response.data);
-      } else if (status == 0) {
+      if (code == 1) { // 成功返回
         return Promise.resolve(response.data);
       } else {
-        if (!response.config.operateBusy) {
-          ElMessage(message);
-        }
         return Promise.reject(response.data);
       }
     } else {
