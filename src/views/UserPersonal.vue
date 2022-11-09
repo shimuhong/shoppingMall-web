@@ -53,6 +53,7 @@
   </div>
 </template>
 <script>
+import { useRouter, useRoute } from 'vue-router';
 import { ref, onMounted, reactive, toRefs } from 'vue';
 import card_vip from '@/assets/card_vip.png';
 import request from '@/utils/request/index.js';
@@ -69,6 +70,7 @@ export default {
     },
   },
   setup() {
+    const router = useRouter();
 
     const params = reactive({
       modelData: {
@@ -126,6 +128,8 @@ export default {
           message: res.msg,
           type: 'success',
         })
+        storage.set('userinfo', {});
+        router.push('/');
       })
     }
 

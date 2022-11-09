@@ -143,6 +143,7 @@ export default {
       }).then(res => {
         console.log('sss:', res);
         params.userinfo = res.data;
+        storage.set('userinfo', params.userinfo);
       })
     });
 
