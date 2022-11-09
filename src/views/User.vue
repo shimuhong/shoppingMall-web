@@ -46,7 +46,7 @@
       </div>
       <div class="rightCont">
         <div class="contTitle">{{menuTilte}}</div>
-        <div class="contComp">
+        <div class="contComp" :class="compName === 'UserMyCollection' ? 'backNone' : ''">
           <!-- 个人中心 -->
           <UserPersonal v-show="compName === 'UserPersonal'" />
           <!-- 我的订单 -->
@@ -289,6 +289,10 @@ $contPadding: 14px;
         min-height: 200px;
         background: #fff;
         padding: 20px 35px 35px;
+      }
+      .contComp.backNone {
+        background: transparent;
+        padding: 0;
       }
     }
   }
