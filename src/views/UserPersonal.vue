@@ -100,10 +100,19 @@ export default {
     });
 
     const imageUrl = ref('')
-
     const handleAvatarSuccess = (response, uploadFile) => {
-      console.log('handleAvatarSuccess:', response, uploadFile) 
+      console.log('handleAvatarSuccess:', response, uploadFile)
       imageUrl.value = URL.createObjectURL(uploadFile.raw)
+
+      let reader = new FileReader()
+      // 传入需要被转换的文本流, 例如element-ui里的el-upload选择完返回的 file.raw
+      reader.readAsDataURL(uploadFile.raw)
+      // onload是异步的,封装的话可以用promise
+      reader.onload = () => {
+        // 输出base64
+        params.modelData.avatar = reader.result
+        console.log('params.modelData.avatar:', params.modelData.avatar)
+      }
 
     }
 
