@@ -30,7 +30,20 @@
           <el-input v-model="modelData.qq" placeholder="请输入QQ号码" />
         </el-form-item>
         <el-form-item label="头像：">
-          上传
+          <el-upload
+            class="avatar-uploader"
+            :action="`${baseUrl}/api/common/upload`"
+            :data="{ token: userinfo.token }"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+          >
+            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+            <div v-else class="avatar">
+              <div class="btn">上传图片</div>
+              <div class="txt">请上传单张图片</div>
+            </div>
+          </el-upload>
         </el-form-item>
       </el-form>
       <el-button type="primary" @click="setUserClick">保存</el-button>
@@ -73,6 +86,7 @@ export default {
     const router = useRouter();
 
     const params = reactive({
+      baseUrl: import.meta.env.VITE_BASE_URL,
       modelData: {
         oldpwd: '',
         newpwd: '',
@@ -84,6 +98,29 @@ export default {
       },
       radioValue: '1'
     });
+
+    const imageUrl = ref('')
+
+    const handleAvatarSuccess = (response, uploadFile) => {
+      console.log('handleAvatarSuccess:', response, uploadFile) 
+      imageUrl.value = URL.createObjectURL(uploadFile.raw)
+
+    }
+
+    // 类型限制
+    const beforeAvatarUpload = (rawFile) => {
+      console.log('beforeAvatarUpload:', rawFile)
+      if (!['image/jpeg', 'image/png'].includes(rawFile.type)) {
+        ElMessage.error('请上传图片类型!')
+        return false
+      } else if (rawFile.size / 1024 / 1024 > 2) {
+        ElMessage.error('图片大小不能超过 2MB!')
+        return false
+      }
+      return true
+    }
+
+
     // 账号设置
     const setUserClick = () => {
       request({
@@ -133,18 +170,79 @@ export default {
       })
     }
 
+    onMounted(() => {
+      console.log('onMounted UserPersonal==', import.meta.env.VITE_BASE_URL);
+
+    });
+
     return {
       ...toRefs(params),
       card_vip,
       updatepwdClick,
-      setUserClick
+      setUserClick,
+      handleAvatarSuccess,
+      beforeAvatarUpload,
+      imageUrl
     };
   }
 }
 
 </script>
 <style lang="scss" scoped>
+
+
+
 .UserPersonal {
+  .avatar-uploader {
+    border: 1px dashed #BA0124;
+    width: 160px;
+    height: 160px;
+  }
+  :deep(.avatar-uploader) .el-upload {
+    width: 100%;
+    height: 100%;
+  }
+  .avatar-uploader .avatar {
+    width: 100%;
+    height: 100%;
+    display: block;
+    text-align: center;
+  }
+  .avatar-uploader .avatar .btn {
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    background: #BA0124;
+    border-radius: 4px;
+    color: #fff;
+    margin: 60px auto 0;
+  }
+  .avatar-uploader .avatar .txt {
+    font-size: 6px;
+    font-weight: 400;
+    color: #999999;
+  }
+  .avatar-uploader .el-upload {
+    border: 1px dashed var(--el-border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: var(--el-transition-duration-fast);
+  }
+
+  .avatar-uploader .el-upload:hover {
+    border-color: var(--el-color-primary);
+  }
+
+  .el-icon.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    text-align: center;
+  }
+
   .radioCont {
     margin-top: 30px;
     position: relative;
