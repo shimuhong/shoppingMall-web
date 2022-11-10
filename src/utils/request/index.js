@@ -15,7 +15,7 @@ instance.defaults.headers['Content-Type'] = 'application/json';
 
 // 请求头信息获取及处理
 const getParams = config => {
-  const { url, method = 'POST', data = {}, operateBusy = false } = config;
+  const { url, method = 'POST', data = {}, operateBusy = false, responseType = 'json' } = config;
 
   if (url && typeof url !== 'string') return false;
   const headers = { ...config.headers };
@@ -34,7 +34,7 @@ const getParams = config => {
     }
     const realConfig = {
       loading: config.loading,
-      responseType: 'json',
+      responseType: responseType,
       responseEncoding: 'utf8',
       timeout: 30000,
       ...option,
@@ -90,6 +90,7 @@ instance.interceptors.response.use(
     // ElMessage.clear();
     if (response.status == 200) {
       const { code, message, data, status } = response.data || {};
+      
       if (code == 1) { // 成功返回
         return Promise.resolve(response.data);
       } else if (code == 0) {

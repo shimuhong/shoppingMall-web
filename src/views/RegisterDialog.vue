@@ -26,7 +26,7 @@
           <img :src="icon_password" >
         </template>
       </el-input>
-      <el-input v-model="qqNumber" placeholder="请输入qq号码" >
+      <el-input v-model="qq" placeholder="请输入qq号码" >
         <template #prefix>
           <img :src="icon_qq" >
         </template>
@@ -35,7 +35,7 @@
       <div class="verificationCode_Box">
         <el-input v-model="captcha" placeholder="请输入验证码" />
         <div class="codeImgBox">
-          VVVV
+          <img :src="captchaBase64" @click="captchaClick">
         </div>
       </div>
 
@@ -75,8 +75,9 @@ export default {
     const params = reactive({
       username: '',
       password: '',
-      qqNumber: '',
+      qq: '',
       captcha: '',
+      captchaBase64: '',
       isChecked: false,
       articleShow: false,
       articleContent: ''
@@ -85,14 +86,8 @@ export default {
     const open = () => {
       console.log('openRegister', DialogRef.value);
       DialogRef.value.open();
-      // 获取图片验证码
-      request({
-        url: '/captcha',
-        method: 'GET',
-        data: {},
-      }).then(res => {
-        
-      })
+      captchaClick()
+      
       request({
         url: '/index_new/get_article_one',
         data: {
@@ -107,6 +102,27 @@ export default {
     const registerAPIClick = () => {
 
       console.log('loginClick:', import.meta.env)
+      if (params.username.length < 5) {
+        ElMessage({
+          message: '请输入5位长度以上的账号',
+          type: 'warning',
+        })
+        return
+      }
+      if (params.password.length < 6) {
+        ElMessage({
+          message: '请输入6位以上的密码',
+          type: 'warning',
+        })
+        return
+      }
+      if (params.captcha.length < 4) {
+        ElMessage({
+          message: '请输入正确的验证码',
+          type: 'warning',
+        })
+        return
+      }
       if (!params.isChecked) {
         ElMessage({
           message: '请勾选协议！',
@@ -120,7 +136,7 @@ export default {
         data: {
           "username": params.username,
           "password": params.password,
-          "qq": params.qqNumber,
+          "qq": params.qq,
           "captcha": params.captcha,
         },
       }).then(res => {
@@ -134,7 +150,25 @@ export default {
         console.log('err:', err)
       });
     }
-
+    // 点击验证码切换
+    const captchaClick = () => {
+      // 获取图片验证码
+      request({
+        url: '/captcha',
+        method: 'GET',
+        responseType: 'blob',
+        data: {},
+      }).catch((res) => {
+        let reader = new FileReader()
+        // 传入需要被转换的文本流, 例如element-ui里的el-upload选择完返回的 file.raw
+        reader.readAsDataURL(res)
+        // onload是异步的,封装的话可以用promise
+        reader.onload = () => {
+          // 输出base64
+          params.captchaBase64 = reader.result
+        }
+      })
+    }
 
     return {
       ...toRefs(params),
@@ -143,7 +177,8 @@ export default {
       icon_userName,
       icon_password,
       icon_qq,
-      registerAPIClick
+      registerAPIClick,
+      captchaClick
     };
   }
 }
@@ -174,6 +209,12 @@ export default {
   margin-left: 6px;
   height: 52px;
   width: 160px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.registerDialog .dialogContent .verificationCode_Box .codeImgBox img {
+  width: 100%;
+  cursor: pointer;
 }
 .registerDialog .dialogContent {
   padding: 30px 55px;

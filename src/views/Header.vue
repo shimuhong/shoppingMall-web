@@ -60,8 +60,8 @@
                     </div>
                   </div>
                 </div>
-                <div class="dropBtn">切换账号</div>
-                <div class="dropBtn">退出登录</div>
+                <div class="dropBtn" @click="replaceUserClick">切换账号</div>
+                <div class="dropBtn" @click="signOutClick">退出登录</div>
               </div>
             </div>
           </div>
@@ -137,6 +137,21 @@ export default {
       params.userinfo = storage.get('userinfo');
     })
 
+    // 切换账号
+    const replaceUserClick = () => {
+      params.userinfo = {};
+      storage.set('userinfo', {});
+      router.push('/');
+      LoginDialogRef.value.open()
+    }
+    // 退出登录
+    const signOutClick = () => {
+      params.userinfo = {};
+      storage.set('userinfo', {});
+      router.push('/');
+
+    }
+
     return {
       ...toRefs(params),
       RegisterDialogRef,
@@ -153,7 +168,9 @@ export default {
       menu_order,
       menu_get,
       menu_bag,
-      storage
+      storage,
+      replaceUserClick,
+      signOutClick
     };
   }
 }

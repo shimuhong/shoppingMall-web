@@ -70,7 +70,20 @@ export default {
 
     const loginAPIClick = () => {
 
-      console.log('loginClick:', import.meta.env)
+      if (params.userName.length < 5) {
+        ElMessage({
+          message: '请输入5位长度以上的账号',
+          type: 'warning',
+        })
+        return
+      }
+      if (params.password.length < 6) {
+        ElMessage({
+          message: '请输入6位以上的密码',
+          type: 'warning',
+        })
+        return
+      }
       if (!params.isChecked) {
         ElMessage({
           message: '请勾选协议！',
