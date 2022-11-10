@@ -26,10 +26,10 @@
                   <div class="headerTxt">
                     <div class="nameBox">
                       <div class="name">{{userinfo.nickname}}</div>
-                      <div class="tag">VIP</div>
+                      <!-- <div class="tag">VIP</div> -->
                     </div>
                     <div class="count">
-                      余额：2345
+                      余额：{{userinfo.money}}
                     </div>
                   </div>
                   

@@ -5,7 +5,7 @@
       <!-- 左侧菜单 -->
       <div class="navBarLeft">
         <div class="userTop">
-          <div class="tip">VIP</div>
+          <!-- <div class="tip">VIP</div> -->
           <div class="headerPic">
             <img :src="userinfo.avatar" alt="">
             
@@ -13,7 +13,7 @@
           <div class="name">{{userinfo.nickname}}</div>
           <div class="number">编号：12323121</div>
           <div class="balanceTxt">余额</div>
-          <div class="balance">2345.00</div>
+          <div class="balance">{{userinfo.money}}</div>
           <div class="btnBox">
             <el-button type="primary" @click="rechargeClick">充值</el-button>
             <el-button class="getPrice" @click="withdrawalClick">提现</el-button>

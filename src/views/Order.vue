@@ -9,15 +9,15 @@
         <div class="userBox">
           <div class="headerBox">
             <div class="headerPic" @click="userClick">
-              <!-- <img :src="prodImg" alt=""> -->
+              <img :src="userinfo.avatar" alt="">
             </div>
             <div class="headerTxt">
               <div class="nameBox">
-                <div class="name">会员昵称</div>
-                <div class="tag">VIP</div>
+                <div class="name">{{userinfo.nickname}}</div>
+                <!-- <div class="tag">VIP</div> -->
               </div>
               <div class="count">
-                余额：2345
+                余额：{{userinfo.money}}
               </div>
             </div>
             
@@ -117,6 +117,7 @@
 <script>
 import { useRouter, useRoute } from 'vue-router';
 import { ref, onMounted, reactive, toRefs } from 'vue';
+import storage from 'store'
 import carouselImg from '@/assets/carouselImg.png';
 import prodImg from '@/assets/prodImg.png';
 import OrderBuy from './OrderBuy.vue';
@@ -142,6 +143,7 @@ export default {
     const $route = useRoute();
 
     const params = reactive({
+      userinfo: {},
       activeName: 'detail'
     });
 
@@ -165,8 +167,8 @@ export default {
     }
 
     onMounted(() => {
-      console.log('onMounted==', $route);
-
+      console.log('onMounted order==');
+      params.userinfo = storage.get('userinfo');
 
     });
 
@@ -217,9 +219,10 @@ export default {
             border-radius: 50%;
             background: #999;
             cursor: pointer;
-            // img {
-            //   width: 100%;
-            // }
+            overflow: hidden;
+            img {
+              width: 100%;
+            }
             
           }
           .headerTxt {
