@@ -21,26 +21,26 @@
         </div>
         <el-menu
           class="el-menu-vertical-warp"
-          default-active="1"
+          :default-active="compName"
         >
           
-          <el-menu-item index="1" @click="menuClick('UserPersonal', '个人中心')">
+          <el-menu-item index="UserPersonal" @click="menuClick('UserPersonal')">
             <img :src="compName === 'UserPersonal' ? icon_UserPersonal_pick : icon_UserPersonal" />
             <div class="title">个人中心</div>
           </el-menu-item>
-          <el-menu-item index="2" @click="menuClick('UserMyOrder', '我的订单')">
+          <el-menu-item index="UserMyOrder" @click="menuClick('UserMyOrder')">
             <img :src="compName === 'UserMyOrder' ? icon_UserMyOrder_pick : icon_UserMyOrder" />
             <div class="title">我的订单</div>
           </el-menu-item>
-          <el-menu-item index="3" @click="menuClick('UserMyCollection', '我的收藏')">
+          <el-menu-item index="UserMyCollection" @click="menuClick('UserMyCollection')">
             <img :src="compName === 'UserMyCollection' ? icon_UserMyCollection_pick : icon_UserMyCollection" />
             <div class="title">我的收藏</div>
           </el-menu-item>
-          <el-menu-item index="4" @click="menuClick('UserMyWallet', '我的钱包')">
+          <el-menu-item index="UserMyWallet" @click="menuClick('UserMyWallet')">
             <img :src="compName === 'UserMyWallet' ? icon_UserMyWallet_pick : icon_UserMyWallet" />
             <div class="title">我的钱包</div>
           </el-menu-item>
-          <el-menu-item index="5" @click="menuClick('UserCashAdmin', '提现管理')">
+          <el-menu-item index="UserCashAdmin" @click="menuClick('UserCashAdmin')">
             <img :src="compName === 'UserCashAdmin' ? icon_UserCashAdmin_pick : icon_UserCashAdmin" />
             <div class="title">提现管理</div>
           </el-menu-item>
@@ -70,7 +70,7 @@
 </template>
 <script>
 import { useRouter, useRoute } from 'vue-router';
-import { ref, onMounted, reactive, toRefs } from 'vue';
+import { ref, onMounted, reactive, toRefs, onActivated, watch } from 'vue';
 import carouselImg from '@/assets/carouselImg.png';
 import prodImg from '@/assets/prodImg.png';
 import request from '@/utils/request/index.js';
@@ -114,6 +114,13 @@ export default {
       compName: 'UserPersonal',
       menuTilte: '个人中心',
       userinfo: {},
+      menuTilteData: {
+        'UserPersonal': '个人中心',
+        'UserMyOrder': '我的订单',
+        'UserMyCollection': '我的收藏',
+        'UserMyWallet': '我的钱包',
+        'UserCashAdmin': '提现管理',
+      }
     });
 
     // 充值
@@ -126,13 +133,25 @@ export default {
     }
 
     // 进入订货页
-    const menuClick = (name, title) => {
+    const menuClick = (name) => {
       params.compName = name;
-      params.menuTilte = title;
+      params.menuTilte = params.menuTilteData[name];
     }
-
+    watch(() => $route.query.type, (value) => {
+        value && menuClick(value);
+    },
+    { 
+      deep: true, 
+      immediate: true 
+    })
+    onActivated(() => {
+      console.log('onActivated user==', $route.query);
+      // if ($route.query.type) {
+      //   params.compName = $route.query.type;
+      // }
+    })
     onMounted(() => {
-      console.log('onMounted==', $route);
+      console.log('onMounted user==', $route.query);
       params.userinfo = storage.get('userinfo');
       // 个人中心
       request({

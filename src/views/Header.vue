@@ -35,25 +35,25 @@
                   
                 </div>
                 <div class="menus">
-                  <div class="menuItem">
+                  <div class="menuItem" @click="menuClick('UserPersonal')">
                     <img :src="menu_my" alt="">
                     <div class="menuName">
                       个人中心
                     </div>
                   </div>
-                  <div class="menuItem">
+                  <div class="menuItem" @click="menuClick('UserMyOrder')">
                     <img :src="menu_order" alt="">
                     <div class="menuName">
                       我的订单
                     </div>
                   </div>
-                  <div class="menuItem">
+                  <div class="menuItem" @click="menuClick('UserMyCollection')">
                     <img :src="menu_get" alt="">
                     <div class="menuName">
                       我的收藏
                     </div>
                   </div>
-                  <div class="menuItem">
+                  <div class="menuItem" @click="menuClick('UserMyWallet')">
                     <img :src="menu_bag" alt="">
                     <div class="menuName">
                       我的钱包
@@ -132,11 +132,7 @@ export default {
     const loginSuccess = () => {
       params.userinfo = storage.get('userinfo');
     }
-    onMounted(() => {
-      console.log('onMounted header userinfo:', storage.get('userinfo'))
-      params.userinfo = storage.get('userinfo');
-    })
-
+    
     // 切换账号
     const replaceUserClick = () => {
       params.userinfo = {};
@@ -151,6 +147,23 @@ export default {
       router.push('/');
 
     }
+
+    // 功能进入
+    const menuClick = (type) => {
+      router.push({
+        path: '/user',
+        query: {
+          type
+        }
+      });
+    }
+
+    onMounted(() => {
+      console.log('onMounted header userinfo:', storage.get('userinfo'))
+      params.userinfo = storage.get('userinfo');
+    })
+
+    
 
     return {
       ...toRefs(params),
@@ -170,7 +183,8 @@ export default {
       menu_bag,
       storage,
       replaceUserClick,
-      signOutClick
+      signOutClick,
+      menuClick
     };
   }
 }
