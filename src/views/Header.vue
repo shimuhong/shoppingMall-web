@@ -129,8 +129,27 @@ export default {
     }
     
     // 登录成功
-    const loginSuccess = () => {
-      params.userinfo = storage.get('userinfo');
+    const loginSuccess = (userinfo) => {
+      storage.set('userinfo', userinfo);
+      storage.set('uid', userinfo.id);
+      storage.set('token', userinfo.token);
+      // 这个是有必要的，因为个人中心拿不到token
+      params.userinfo = userinfo;
+
+      // 个人中心
+      request({
+        url: '/user/get_user_info',
+        data: {
+          "uid": userinfo.id //用户id
+        },
+      }).then(res => {
+        console.log('sss:', res);
+        params.userinfo = {
+          ...res.data,
+          ...params.userinfo,
+        }
+        storage.set('userinfo', params.userinfo);
+      })
     }
     
     // 切换账号

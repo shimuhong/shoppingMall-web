@@ -48,7 +48,6 @@ import icon_password from '@/assets/icon_password.png';
 import icon_qq from '@/assets/icon_qq.png';
 import { ElMessage } from 'element-plus'
 import request from '@/utils/request/index.js';
-import storage from 'store'
 
 export default {
   name: 'RegisterDialog',
@@ -104,9 +103,7 @@ export default {
           message: res.msg,
           type: 'success',
         })
-        storage.set('userinfo', res.data.userinfo);
-        storage.set('uid', res.data.userinfo.id);
-        storage.set('token', res.data.userinfo.token);
+        
         DialogRef.value.close();
         emit('loginSuccess', res.data.userinfo);
       }).catch((err) => {

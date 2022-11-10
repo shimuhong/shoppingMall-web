@@ -153,17 +153,7 @@ export default {
     onMounted(() => {
       console.log('onMounted user==', $route.query);
       params.userinfo = storage.get('userinfo');
-      // 个人中心
-      request({
-        url: '/user/get_user_info',
-        data: {
-          "uid": params.userinfo.id //用户id
-        },
-      }).then(res => {
-        console.log('sss:', res);
-        params.userinfo = res.data;
-        storage.set('userinfo', params.userinfo);
-      })
+
     });
 
 
