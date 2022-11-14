@@ -11,7 +11,7 @@
 
       <div class="messageBox btnBox">
         <el-input v-model="verificationCode" placeholder="请输入验证码" />
-        <el-button type="primary" @click="getSmsClick">获取验证码</el-button>
+        <el-button type="primary" @click="getSmsClick" :disabled="disabledSms">{{getSmsText}}</el-button>
       </div>
 
       <el-input
@@ -55,6 +55,9 @@ export default {
   setup(props, { emit }) {
     const DialogRef = ref();
     const params = reactive({
+      getSmsText: '获取验证码',
+      timeNum: 60,
+      disabledSms: false,
       userName: '',
       password: '',
       verificationCode: '',
@@ -94,7 +97,7 @@ export default {
         })
         return
       }
-
+      params.disabledSms = true;
       request({
         url: '/sms_send/get_sms_send',
         data: {
@@ -102,11 +105,41 @@ export default {
         },
       }).then(res => {
         console.log('sss:', res)
+        
+        params.timeNum = 60;
+        Interval_start()
         ElMessage({
           message: res.msg,
           type: 'success',
         })
+      }).catch(() => {
+        params.disabledSms = false;
       })
+    }
+
+    
+    
+    const Interval_start = () => {
+      console.log(params.timeNum)
+      
+      if (params.timeNum > 0) {
+        params.getSmsText = `${params.timeNum}秒后重新获取`
+      } else {
+        params.getSmsText = `重新获取验证码`
+        params.disabledSms = false;
+      }
+      
+
+      let timer = null;
+      clearTimeout(timer)
+      
+      timer = setTimeout(() => {
+        
+
+        
+        if(params.timeNum >= 0) Interval_start()
+        params.timeNum --;
+      }, 1000)
     }
 
     return {
@@ -196,9 +229,12 @@ export default {
   border-radius: 14px;
 }
 .forgetDialog .dialogContent .btnBox .el-button.el-button--primary {
-  background: #BA0124;
+  background: rgba(186, 1, 36, 1);
   color: #fff;
   border: none;
+}
+.forgetDialog .dialogContent .btnBox .el-button.el-button--primary.is-disabled {
+  background: rgba(186, 1, 36, 0.6);
 }
 .forgetDialog .dialogContent .btnBox .el-button.default {
   border:1px solid #BA0124;
